@@ -5,14 +5,17 @@ import java.util.Collection;
 public class SistemaUsuario {
 
 	private static SistemaUsuario instancia;
-
-	private Collection<Administrador> administradores;
-	private Collection<Propietario> propietarios;
+    private Usuario usuarioLogueado;
+	private Collection<Usuario> usuarios;
     private EstadoPropietario estadoHabilitado;
     private EstadoPropietario estadoDeshabilitado;
     private EstadoPropietario estadoSuspendido;
     private EstadoPropietario estadoPenalizado;
 
+    private SistemaUsuario() {
+        this.usuarios = new java.util.ArrayList<>();
+        this.precargaEstados();
+    }
 
 	public static SistemaUsuario getInstancia() {
 		if (instancia == null) {
@@ -42,32 +45,52 @@ public class SistemaUsuario {
     }
 
 	public Usuario validarCredenciales(String cedula, String contrasenia) {
-		return null;
+		Usuario usuario = this.buscarUsuarioPorCI(cedula);
+        if(usuario != null && usuario.verificarContrasenia(contrasenia)){
+            return usuario;
+        }
+        return null;
 	}
-
-	public void registrarLogout(String cedula) {
-
+    public boolean iniciarSesion(String cedula, String contrasenia) {
+        Usuario usuario = this.validarCredenciales(cedula, contrasenia);
+        if(usuario != null) {
+            this.usuarioLogueado = usuario;
+            return true;
+        }
+        return false;
+    }
+	public void registrarLogout() {
+        this.usuarioLogueado = null;
 	}
 
 	public void agregarPropietario(String cedula, String nombreCompleto, String contrasenia, double SaldoActual,
 	double saldoMinimoAlerta) {
 		 Propietario propietario = new Propietario(cedula, nombreCompleto, contrasenia, SaldoActual, saldoMinimoAlerta);
-		 this.propietarios.add(propietario);
+		 this.usuarios.add(propietario);
 	}
 
 	public void agregarAdministrador(String cedula, String nombreCompleto, String contrasenia) {
 		 Administrador administrador = new Administrador(cedula, nombreCompleto, contrasenia);
-		 this.administradores.add(administrador);
+		 this.usuarios.add(administrador);
 	}
 
-	public Propietario buscarPropietarioPorCI(String ci) {
-		for (Propietario propietario : propietarios) {
-			if (propietario.getCedula().equals(ci)) {
-				return propietario;
-			}
-		}
-		return null;
-	}
+	
+    public Usuario buscarUsuarioPorCI(String ci) {
+        for(Usuario usuario : usuarios) {
+            if(usuario.getCedula().equals(ci)) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
+    public Propietario buscarPropietarioPorCI(String ci) {
+        Usuario usuario = this.buscarUsuarioPorCI(ci);
+        if(usuario != null && usuario instanceof Propietario) {
+            return (Propietario) usuario;
+        }
+        return null;
+    }
 
 	public void agregarVehiculo(Propietario propietario, String matricula,
 	 String marca, String modelo,String color, int anio, CategoriaVehiculo categoria) {

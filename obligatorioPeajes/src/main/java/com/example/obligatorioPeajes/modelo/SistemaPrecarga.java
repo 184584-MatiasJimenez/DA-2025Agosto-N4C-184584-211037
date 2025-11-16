@@ -19,7 +19,7 @@ public class SistemaPrecarga {
 		CategoriaVehiculo categoriaMoto = new CategoriaVehiculo("Moto");
 
 		//tipos de bonificaciones
-		sistemaBonificacion.precargaTiposBonificaciones();
+		sistemaBonificacion.precargarTiposBonificacion();
 
 		//agregar puestos
 		PuestoDePeaje puesto1 = sistemaTransito.agregarPuestoDePeaje("Puesto Central", "Ruta 1 km 20");
@@ -56,12 +56,11 @@ public class SistemaPrecarga {
 		sistemaUsuario.agregarPropietario("23345674", "Ana Martinez", "Prop.321", 2200, 500);
 		sistemaUsuario.agregarPropietario("24345673", "Pedro Sanchez", "Prop.654", 1700, 250);
 
-		Propietario propA = sistemaUsuario.buscarPropietarioPorCI("19345678");
-		Propietario propB = sistemaUsuario.buscarPropietarioPorCI("20345676");
-		Propietario propC = sistemaUsuario.buscarPropietarioPorCI("22345675");
-		Propietario propD = sistemaUsuario.buscarPropietarioPorCI("23345674");
-		Propietario propE = sistemaUsuario.buscarPropietarioPorCI("24345673");
-
+		Propietario propA = (Propietario) sistemaUsuario.buscarUsuarioPorCI("19345678");
+		Propietario propB = (Propietario) sistemaUsuario.buscarUsuarioPorCI("20345676");
+		Propietario propC = (Propietario) sistemaUsuario.buscarUsuarioPorCI("22345675");
+		Propietario propD = (Propietario) sistemaUsuario.buscarUsuarioPorCI("23345674");
+		Propietario propE = (Propietario) sistemaUsuario.buscarUsuarioPorCI("24345673");
 		//Agregar vehiculos
 		categoriaAuto = sistemaTransito.buscarCategoriaPorNombre("Automóvil");
 		sistemaUsuario.agregarVehiculo(propA, "ABC123", "Toyota", "Corolla", "Rojo", 2020, categoriaAuto);
@@ -83,6 +82,14 @@ public class SistemaPrecarga {
         sistemaTransito.registrarTransito("MOTO2", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 12, 30)));
         sistemaTransito.registrarTransito("CAMIONETA1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 13, 15)));
         sistemaTransito.registrarTransito("CAMIONETA2", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 14, 0)));
-	}
+        
+        Bonificacion bonifExonerado = sistemaBonificacion.buscarBonificacionPorNombre("Exonerado");
+        Bonificacion bonifFrecuente = sistemaBonificacion.buscarBonificacionPorNombre("Frecuente");
+        Bonificacion bonifTrabajador = sistemaBonificacion.buscarBonificacionPorNombre("Trabajador");
+        //asignar bonificaciones a propietarios
+        sistemaBonificacion.asignarBonificacion(propE, puesto4, bonifExonerado);
+        sistemaBonificacion.asignarBonificacion(propA, puesto1, bonifFrecuente);
+        sistemaBonificacion.asignarBonificacion(propB, puesto2, bonifTrabajador);
+    }
 
 }
