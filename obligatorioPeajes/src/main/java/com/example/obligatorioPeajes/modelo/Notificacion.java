@@ -6,4 +6,12 @@ public class Notificacion {
 
 	private String mensaje;
 
+    public DateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
 }

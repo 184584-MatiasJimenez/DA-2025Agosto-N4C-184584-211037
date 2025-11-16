@@ -4,14 +4,6 @@ public class Fachada {
 
 	private static Fachada instancia;
 
-	private SistemaUsuario sistemaUsuario;
-
-	private SistemaTransito sistemaTransito;
-
-	private SistemaBonificacion sistemaBonificacion;
-
-	private SistemaPrecarga sistemaPrecarga;
-
 	public static Fachada getInstance() {
         if(instancia == null) {
             instancia = new Fachada();

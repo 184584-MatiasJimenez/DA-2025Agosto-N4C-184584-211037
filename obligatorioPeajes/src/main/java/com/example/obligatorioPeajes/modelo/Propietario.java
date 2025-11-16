@@ -1,13 +1,12 @@
 package com.example.obligatorioPeajes.modelo;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.ArrayList;
 
 public class Propietario extends Usuario {
 
 	private int id;
-
-	private String nombre;
 
 	private double saldoActual;
 
@@ -15,9 +14,9 @@ public class Propietario extends Usuario {
 
 	private EstadoPropietario estado;
 
-	private java.util.List<BonificacionAsignada> bonificacionesAsignadas;
+	private List<BonificacionAsignada> bonificacionesAsignadas;
 
-	private java.util.List<Notificacion> notificaciones;
+	private List<Notificacion> notificaciones;
 
 	private Collection<Vehiculo> vehiculos;
 
@@ -32,16 +31,45 @@ public class Propietario extends Usuario {
 		this.estado = SistemaUsuario.getInstancia().getEstadoHabilitado();
 	}
 
+    public int getId() {
+        return id;
+    }
+    public double getSaldoActual() {
+        return saldoActual;
+    }
+    public double getSaldoMinimoAlerta() {
+        return saldoMinimoAlerta;
+    }
+    public EstadoPropietario getEstado() {
+        return estado;
+    }
+    public List<BonificacionAsignada> getBonificacionesAsignadas() {
+        return bonificacionesAsignadas;
+    }
+    public List<Notificacion> getNotificaciones() {
+        return notificaciones;
+    }
+    public String getNombre() {
+        return super.getNombreCompleto();
+    }
+    public String getCedula(){
+        return super.getCedula();
+    }
+    public Collection<Vehiculo> getVehiculos() {
+        return vehiculos;
+    }
+
+
 	public void agregarVehiculo(Vehiculo v) {
 		this.vehiculos.add(v);
 	}
 
 	public boolean puedeRealizarTransito() {
-		return false;
+		return this.estado.puedeRealizarTransito();
 	}
 
 	public boolean puedeRecibirNotifiaciones() {
-		return false;
+		return this.estado.puedeRecibirNotificaciones();
 	}
 
 	public void restarSaldo(double monto) {
@@ -63,15 +91,15 @@ public class Propietario extends Usuario {
 	public boolean tieneBonificacionesEn(PuestoDePeaje puesto) {
 		return false;
 	}
-
-	public void asignarBonificacion(Bonificacion b, PuestoDePeaje puesto) {
-
-	}
-
-    public Object getCedula() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getCedula'");
+    public void agregarBonificacionAsignada(BonificacionAsignada ba) {
+        if(ba == null) return;
+        if(!this.bonificacionesAsignadas.contains(ba)){
+            this.bonificacionesAsignadas.add(ba);
+        } 
     }
-
+    
+    public List<BonificacionAsignada> obtenerBonificacionesAsignadas() {
+        return new ArrayList<>(this.bonificacionesAsignadas);
+    }
 
 }

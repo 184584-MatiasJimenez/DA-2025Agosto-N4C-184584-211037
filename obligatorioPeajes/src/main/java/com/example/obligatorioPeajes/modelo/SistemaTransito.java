@@ -7,6 +7,7 @@ public class SistemaTransito {
     private static SistemaTransito instancia;
 	private Collection<Transito> transito;
     private Collection<Tarifa> tarifas;
+    private Collection<PuestoDePeaje> puestosDePeaje;
 
     public Collection<Tarifa> getTarifas() {
         return tarifas;
@@ -30,9 +31,10 @@ public class SistemaTransito {
        return instancia;
     }
 
-    public PuestoDePeaje agregarPuestoDePeaje(String string, String string2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'agregarPuestoDePeaje'");
+    public PuestoDePeaje agregarPuestoDePeaje(String nombre, String ubicacion) {
+        PuestoDePeaje nuevoPuesto = new PuestoDePeaje(nombre, ubicacion);
+        this.puestosDePeaje.add(nuevoPuesto);
+        return nuevoPuesto;
     }
 
     public CategoriaVehiculo buscarCategoriaPorNombre(String nombre) {

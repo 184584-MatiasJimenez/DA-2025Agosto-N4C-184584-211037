@@ -1,5 +1,7 @@
 package com.example.obligatorioPeajes.modelo;
 
+import java.time.LocalDateTime;
+
 public class SistemaPrecarga {
 
 
@@ -24,6 +26,24 @@ public class SistemaPrecarga {
 		PuestoDePeaje puesto2 = sistemaTransito.agregarPuestoDePeaje("Puesto Norte", "Ruta 5 km 50");
         PuestoDePeaje puesto3 = sistemaTransito.agregarPuestoDePeaje("Puesto Sur", "Ruta 10 km 100");
         PuestoDePeaje puesto4 = sistemaTransito.agregarPuestoDePeaje("Puesto Este", "Ruta 15 km 150");
+        
+        //agregar tarifas - Puesto Central (puesto1)
+        sistemaTransito.agregarTarifa(puesto1, categoriaAuto, 100.0);
+        sistemaTransito.agregarTarifa(puesto1, catCamioneta, 150.0);
+        sistemaTransito.agregarTarifa(puesto1, categoriaMoto, 50.0);
+        //agregar tarifas - Puesto Norte (puesto2)
+        sistemaTransito.agregarTarifa(puesto2, categoriaAuto, 120.0);
+        sistemaTransito.agregarTarifa(puesto2, catCamioneta, 170.0);
+        sistemaTransito.agregarTarifa(puesto2, categoriaMoto, 60.0);
+        //agregar tarifas - Puesto Sur (puesto3)
+        sistemaTransito.agregarTarifa(puesto3, categoriaAuto, 110.0);
+        sistemaTransito.agregarTarifa(puesto3, catCamioneta, 160.0);
+        sistemaTransito.agregarTarifa(puesto3, categoriaMoto, 55.0);
+        //agregar tarifas - Puesto Este (puesto4)
+        sistemaTransito.agregarTarifa(puesto4, categoriaAuto, 130.0);
+        sistemaTransito.agregarTarifa(puesto4, catCamioneta, 180.0);
+        sistemaTransito.agregarTarifa(puesto4, categoriaMoto, 65.0);
+
 
 		//Agregar administradores
 		sistemaUsuario.agregarAdministrador("52345679", "Usuario Admin", "Admin.123");
@@ -55,7 +75,14 @@ public class SistemaPrecarga {
 		sistemaUsuario.agregarVehiculo(propC, "CAMIONETA1", "Chevrolet", "Trax", "Gris", 2022, catCamioneta);
 		sistemaUsuario.agregarVehiculo(propA, "CAMIONETA2", "Jeep", "Renegade", "Blanco", 2018, catCamioneta);
 
-
+        //Simular Tránsito
+        sistemaTransito.registrarTransito("ABC123", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 8, 30)));
+        sistemaTransito.registrarTransito("DEF456", "Puesto Norte", new DateTime(LocalDateTime.of(2024, 6, 1, 9, 15)));
+        sistemaTransito.registrarTransito("GHI789", "Puesto Sur", new DateTime(LocalDateTime.of(2024, 6, 1, 10, 0)));
+        sistemaTransito.registrarTransito("MOTO1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 11, 45)));
+        sistemaTransito.registrarTransito("MOTO2", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 12, 30)));
+        sistemaTransito.registrarTransito("CAMIONETA1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 13, 15)));
+        sistemaTransito.registrarTransito("CAMIONETA2", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 14, 0)));
 	}
 
 }

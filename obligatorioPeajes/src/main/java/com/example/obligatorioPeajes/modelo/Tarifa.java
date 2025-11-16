@@ -13,5 +13,14 @@ public class Tarifa {
         this.categoria = categoria;
         this.monto = monto;
     }
+    public double getMonto() {
+        return monto;
+    }
+    public CategoriaVehiculo getCategoria() {
+        return categoria;
+    }
+    public PuestoDePeaje getPuesto() {
+        return puesto;
+    }
 
 }

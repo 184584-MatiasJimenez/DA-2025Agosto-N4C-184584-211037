@@ -4,8 +4,13 @@ public abstract class Bonificacion {
 
 	private String nombre;
 
-	public double calcularMontoBonificacion(Transito t) {
-		return 0;
+    public Bonificacion(String nombre) {
+        this.nombre = nombre;
+    }
+
+	public String getNombre() {
+		return nombre;
 	}
+    public abstract double calcularMontoFijo(Transito t, PuestoDePeaje puesto);
 
 }
