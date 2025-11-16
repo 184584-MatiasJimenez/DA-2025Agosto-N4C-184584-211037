@@ -36,7 +36,14 @@ public class SistemaBonificacion {
 	}
 
 	public Bonificacion buscarBonificacionPorNombre(String nombre) {
-		return null;
+		Bonificacion bonificacionBuscada = null;
+        for(Bonificacion b : this.bonificacion) {
+            if(b.getNombre().equalsIgnoreCase(nombre)) {
+                bonificacionBuscada = b;
+                break;
+            }
+        }
+        return bonificacionBuscada;
 	}
 
     public BonificacionAsignada asignarBonificacion(Propietario propietario, PuestoDePeaje puesto, Bonificacion bonificacion) {
@@ -53,10 +60,5 @@ public class SistemaBonificacion {
 	public void calcularMontoDescuento(BonificacionAsignada bonificacionAsignada, Transito transito) {
 
 	}
-
-    public void precargaTiposBonificaciones() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'precargaTiposBonificaciones'");
-    }
 
 }

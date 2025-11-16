@@ -2,7 +2,15 @@ package com.example.obligatorioPeajes.modelo;
 
 public class Fachada {
 
-	private static Fachada instancia;
+    private static Fachada instancia;
+    private SistemaUsuario sistemaUsuario;
+    private SistemaTransito sistemaTransito;
+    private SistemaBonificacion sistemaBonificacion;
+    private Fachada() {
+        this.sistemaUsuario = SistemaUsuario.getInstancia();
+        this.sistemaTransito = SistemaTransito.getInstancia();
+        this.sistemaBonificacion = SistemaBonificacion.getInstancia();
+    }
 
 	public static Fachada getInstance() {
         if(instancia == null) {
@@ -12,15 +20,20 @@ public class Fachada {
 	}
 
 	public Usuario login(String cedula, String contrasenia) {
-		return null;
+		boolean loginExitoso = this.sistemaUsuario.iniciarSesion(cedula, contrasenia);
+        if(loginExitoso) {
+            return this.sistemaUsuario.buscarPropietarioPorCI(cedula);
+        }
+        return null;
 	}
 
 	public void precargaDatosIniciales() {
-
+        SistemaPrecarga precarga = new SistemaPrecarga();
+        precarga.cargarDatosIniciales();
 	}
 
 	public void logout(String cedula) {
-
+        this.sistemaUsuario.registrarLogout();
 	}
 
 	public Propietario obtenerDatosPropietario(String cedula) {

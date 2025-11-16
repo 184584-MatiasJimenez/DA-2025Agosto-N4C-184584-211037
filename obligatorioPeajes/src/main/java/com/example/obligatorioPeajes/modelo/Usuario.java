@@ -26,5 +26,10 @@ public abstract class Usuario {
     public String getContrasenia() {
         return contrasenia;
     }
+    public boolean verificarContrasenia(String contrasenia) {
+        return this.contrasenia.equalsIgnoreCase(contrasenia);
+    }
+
+
 
 }
