@@ -4,6 +4,7 @@ import java.util.Collection;
 
 public class SistemaTransito {
 
+    private static SistemaTransito instancia;
 	private Collection<Transito> transito;
     private Collection<Tarifa> tarifas;
 
@@ -23,8 +24,10 @@ public class SistemaTransito {
 	}
 
     public static SistemaTransito getInstancia() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
+       if(instancia == null) {
+           instancia = new SistemaTransito();
+       }
+       return instancia;
     }
 
     public PuestoDePeaje agregarPuestoDePeaje(String string, String string2) {

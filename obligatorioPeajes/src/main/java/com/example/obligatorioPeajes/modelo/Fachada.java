@@ -2,7 +2,7 @@ package com.example.obligatorioPeajes.modelo;
 
 public class Fachada {
 
-	private Fachada instancia;
+	private static Fachada instancia;
 
 	private SistemaUsuario sistemaUsuario;
 
@@ -13,7 +13,10 @@ public class Fachada {
 	private SistemaPrecarga sistemaPrecarga;
 
 	public static Fachada getInstance() {
-		return null;
+        if(instancia == null) {
+            instancia = new Fachada();
+        }
+        return instancia;
 	}
 
 	public Usuario login(String cedula, String contrasenia) {
