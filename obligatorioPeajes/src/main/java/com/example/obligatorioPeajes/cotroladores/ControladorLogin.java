@@ -24,7 +24,7 @@ public class ControladorLogin {
             session.setAttribute("sesion", sesionCreada);
             Respuesta datosPropietario = new Respuesta("datosPropietario", propietarioLogueado.getNombreCompleto());
             //respuesta de exito
-            return Respuesta.lista(new Respuesta("loginExitoso", "Tablero"), datosPropietario);
+            return Respuesta.lista(new Respuesta("loginExitoso", "TableroPropietario"), datosPropietario);
     }
     @PostMapping("/logout")
     public List<Respuesta> logout(HttpSession sesionHttp) {

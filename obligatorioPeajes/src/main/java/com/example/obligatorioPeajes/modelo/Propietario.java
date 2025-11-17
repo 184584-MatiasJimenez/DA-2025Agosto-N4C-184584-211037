@@ -1,4 +1,5 @@
 package com.example.obligatorioPeajes.modelo;
+
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ public class Propietario extends Usuario {
 	private Collection<Vehiculo> vehiculos;
 
 	public Propietario(String cedula, String nombreCompleto, String contrasenia,
-	 double saldoActual, double saldoMinimoAlerta) {
+			double saldoActual, double saldoMinimoAlerta) {
 		super(cedula, nombreCompleto, contrasenia);
 		this.saldoActual = saldoActual;
 		this.saldoMinimoAlerta = saldoMinimoAlerta;

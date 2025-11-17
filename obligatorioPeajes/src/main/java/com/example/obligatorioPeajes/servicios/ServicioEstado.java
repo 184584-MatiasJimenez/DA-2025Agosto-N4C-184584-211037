@@ -1,4 +1,5 @@
 package com.example.obligatorioPeajes.servicios;
+
 import com.example.obligatorioPeajes.modelo.*;
 
 public class ServicioEstado {
@@ -21,7 +22,7 @@ public class ServicioEstado {
     }
 
     public static ServicioEstado getInstancia() {
-        if(instancia == null) {
+        if (instancia == null) {
             instancia = new ServicioEstado();
         }
         return instancia;
@@ -30,18 +31,23 @@ public class ServicioEstado {
     public EstadoPropietario getEstadoHabilitado() {
         return estadoHabilitado;
     }
+
     public EstadoPropietario getEstadoDeshabilitado() {
         return estadoDeshabilitado;
     }
+
     public EstadoPropietario getEstadoSuspendido() {
         return estadoSuspendido;
     }
+
     public EstadoPropietario getEstadoPenalizado() {
         return estadoPenalizado;
     }
+
     public EstadoFrecuente getEstadoPrimerTransito() {
         return estadoPrimerTransito;
     }
+
     public EstadoFrecuente getEstadoFrecuenteDia() {
         return estadoFrecuenteDia;
     }

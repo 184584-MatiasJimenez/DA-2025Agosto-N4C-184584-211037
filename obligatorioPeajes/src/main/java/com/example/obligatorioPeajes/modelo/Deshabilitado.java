@@ -21,14 +21,12 @@ public class Deshabilitado implements EstadoPropietario {
 		return false;
 	}
 
-
 	/**
 	 * @see EstadoPropietario#puedeRecibirNotificaciones()
 	 */
 	public boolean puedeRecibirNotificaciones() {
 		return false;
 	}
-
 
 	/**
 	 * @see EstadoPropietario#puedeRealizarTransito()

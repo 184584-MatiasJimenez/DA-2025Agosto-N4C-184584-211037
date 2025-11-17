@@ -2,7 +2,7 @@ package com.example.obligatorioPeajes.modelo;
 
 public abstract class Usuario {
 
-	public Usuario(String cedula2, String nombreCompleto2, String contrasenia2) {
+    public Usuario(String cedula2, String nombreCompleto2, String contrasenia2) {
         this.cedula = cedula2;
         this.nombreCompleto = nombreCompleto2;
         this.contrasenia = contrasenia2;
@@ -10,10 +10,9 @@ public abstract class Usuario {
 
     private String cedula;
 
-	private String nombreCompleto;
+    private String nombreCompleto;
 
-	private String contrasenia;
-
+    private String contrasenia;
 
     public String getCedula() {
         return cedula;
@@ -26,6 +25,7 @@ public abstract class Usuario {
     public String getContrasenia() {
         return contrasenia;
     }
+
     public boolean verificarContrasenia(String contrasenia) {
         System.out.println("[DEBUG] Comparando: stored='" + this.contrasenia + "' input='" + contrasenia + "'");
         System.out.println("[DEBUG] Trim stored='" + this.contrasenia.trim() + "' Trim input='" + contrasenia.trim() + "'");
@@ -34,7 +34,5 @@ public abstract class Usuario {
         }
         return this.contrasenia.equalsIgnoreCase(contrasenia.trim());
     }
-
-
 
 }

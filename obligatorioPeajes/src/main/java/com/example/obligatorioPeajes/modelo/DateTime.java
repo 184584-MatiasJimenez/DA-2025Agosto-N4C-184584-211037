@@ -13,6 +13,7 @@ public class DateTime {
     public LocalDateTime getFechaHora() {
         return fechaHora;
     }
+
     public DayOfWeek getDayOfWeek() {
         return this.fechaHora.getDayOfWeek();
     }

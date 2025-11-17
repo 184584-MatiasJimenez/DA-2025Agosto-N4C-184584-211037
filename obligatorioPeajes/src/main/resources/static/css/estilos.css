@@ -1,456 +1,248 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
+/* Variables de color */
+        :root {
+            --color-primary: #007bff; /* Azul */
+            --color-error: #dc3545; /* Rojo */
+        }
+        
+        /* Estilos generales */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        #main-app-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-/* Override body styles for contact management pages */
-body.page-gestion-contactos {
-    display: block;
-    height: auto;
-    min-height: 100vh;
-    justify-content: initial;
-    align-items: initial;
-}
+        /* Estilos de Login */
+        #login-view {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            text-align: center;
+        }
 
-.login-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    text-align: center;
-}
+        #login-view h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-h2 {
-    margin-bottom: 20px;
-    color: #333;
-}
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
 
-.form-group {
-    margin-bottom: 15px;
-    text-align: left;
-}
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box; /* Incluye padding y border en el ancho */
+        }
 
-input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
+        .btn-ingresar {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            font-weight: bold;
+        }
+        
+        .btn-ingresar:hover {
+            background-color: var(--color-secondary);
+        }
+        .btn-ingresar:active {
+            transform: scale(0.98);
+        }
+        
+        /* Estilos del Dashboard (Tablero) */
+        #dashboard-view {
+            padding: 24px;
+        }
+        
+        #dashboard-view h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+        
+        #dashboard-view h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 4px solid var(--color-primary);
+        }
+        
+        .header-dashboard {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
 
-.btn-acceder {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
+        @media (min-width: 768px) {
+            .header-dashboard {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
 
-.btn-acceder:hover {
-    background-color: #45a049;
-}
+        /* Botón de Logout */
+        .btn-logout {
+            background-color: var(--color-error);
+            color: white;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
 
-.welcome-container {
-    text-align: center;
-    padding: 50px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-}
+        .btn-logout:hover {
+            background-color: #c82333; /* Rojo más oscuro */
+        }
 
-.welcome-container h1 {
-    color: #333;
-    font-size: 2.5em;
-    margin-bottom: 20px;
-}
+        /* Tarjetas de Datos */
+        .data-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
 
-.welcome-container p {
-    color: #666;
-    font-size: 1.2em;
-    line-height: 1.6;
-}
+        @media (min-width: 768px) {
+            .data-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
 
-/* Estilos del menú lateral */
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 180px;
-    height: 100%;
-    background: #1976d2;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding-top: 40px;
-}
-.sidebar button {
-    background: none;
-    border: none;
-    color: #fff;
-    padding: 18px 0;
-    font-size: 15.3px;
-    cursor: pointer;
-    text-align: left;
-    padding-left: 30px;
-    transition: background 0.2s;
-}
-.sidebar button:hover {
-    background: #1565c0;
-}
-.sidebar label {
-    display: block;
-    color: #fff;
-    font-size: 17px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    margin-left: 20px;
-    letter-spacing: 1px;
-    text-shadow: 1px 1px 2px #1565c0;
-}
+        .card {
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid;
+        }
 
-/* Estilos del contenedor principal */
-.content {
-    margin-left: 180px; /* Espacio para el sidebar */
-    width: calc(100% - 180px); /* Usar todo el ancho restante */
-    height: 100vh;
-    overflow: hidden;
-    padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-right: 0;
-    box-sizing: border-box;
-}
+        /* Colores específicos de las tarjetas */
+        .card-blue { background-color: #ebf8ff; border-left-color: #3182ce; }
+        .card-green { background-color: #f0fff4; border-left-color: #38a169; }
+        .card-yellow { background-color: #fffbeb; border-left-color: #d69e2e; }
 
-/* Estilos específicos para el iframe */
-.content iframe {
-    width: 100% !important;
-    height: 100% !important;
-    border: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-}
+        .card h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #4b5563;
+            margin-top: 0;
+            margin-bottom: 4px;
+            border-left: none;
+            padding-left: 0;
+        }
 
-/* Estilos para el contenido dentro del iframe cuando es gestionContactos.html */
-/* Esto asegura que el contenido use todo el ancho disponible del iframe */
-html, body {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
-}
+        .card .value {
+            font-size: 2.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .card-green .value { color: #38a169; }
+        .card-yellow .value { color: #d69e2e; }
 
-/* Estilos específicos para gestionContactos.html */
-.page-gestion-contactos * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* Estilos de Tabla */
+        .table-container {
+            overflow-x: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
 
-.page-gestion-contactos body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    min-height: 100vh;
-}
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
 
-.page-gestion-contactos .container {
-    width: 80%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    min-height: 100vh;
-    box-sizing: border-box;
-}
+        .data-table thead {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
 
-.page-gestion-contactos h2 {
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
-}
+        .data-table th, .data-table td {
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f9fafb;
+        }
 
-.page-gestion-contactos .form-group {
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.page-gestion-contactos label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-    font-weight: bold;
-}
-
-.page-gestion-contactos input[type="text"],
-.page-gestion-contactos input[type="tel"],
-.page-gestion-contactos select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-.page-gestion-contactos button {
-    width: auto;
-    min-width: 200px;
-    max-width: 300px;
-    padding: 12px 24px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto;
-}
-
-.page-gestion-contactos button:hover {
-    background-color: #45a049;
-}
-
-.page-gestion-contactos #contenedorAgenda {
-    margin-top: 30px;
-    width: 100%;
-}
-
-.page-gestion-contactos table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.page-gestion-contactos th, 
-.page-gestion-contactos td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-}
-
-.page-gestion-contactos th {
-    background-color: #f2f2f2;
-}
-
-/* Formulario más amplio y legible para gestionContactos.html */
-.form-large {
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-.form-large .form-group {
-    max-width: none !important;
-    margin-bottom: 20px;
-    width: 100% !important;
-}
-.form-large input[type="text"],
-.form-large input[type="tel"],
-.form-large input[type="password"],
-.form-large select,
-.form-large textarea {
-    width: 100% !important;
-    padding: 12px 14px;
-    font-size: 1.1rem;
-    height: 44px;
-    line-height: 1.2;
-    border-radius: 6px;
-    border: 1px solid #cfcfcf;
-    box-sizing: border-box !important;
-    max-width: none !important;
-}
-.form-large .btn-acceder {
-    padding: 12px 16px;
-    font-size: 1.05rem;
-    margin-top: 10px;
-}
-
-/* Estilos específicos para tipos de contacto */
-.tipos-contacto-group {
-    margin: 20px 0;
-    width: 100% !important;
-}
-.tipos-contacto-group label {
-    font-weight: bold;
-    margin-bottom: 10px;
-    display: block;
-    color: #333;
-}
-.tipo-option {
-    display: flex;
-    align-items: center;
-    margin: 8px 0;
-    padding: 8px;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-}
-.tipo-option input[type="radio"] {
-    margin-right: 10px;
-    width: auto;
-    height: auto;
-}
-.tipo-option label {
-    margin: 0;
-    font-weight: normal;
-    cursor: pointer;
-}
-
-/* Contenedor de la lista de contactos */
-.contactos-lista {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-.contactos-lista h3 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.3rem;
-}
-.contacto-item {
-    background-color: white;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border-left: 4px solid #4CAF50;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-.contacto-nombre {
-    font-weight: bold;
-    color: #333;
-    font-size: 1.1rem;
-}
-.contacto-info {
-    color: #666;
-    margin-top: 5px;
-}
-
-.phone-field {
-    /* Remove max-width constraint to allow full width */
-    max-width: none;
-}
-
-/* Contenedor de formulario de ancho completo */
-.form-container-fullwidth {
-    max-width: none;
-    width: 100%;
-    box-shadow: none;
-    padding: 20px;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-/* In page-gestion-contactos mode, make form take more width */
-body.page-gestion-contactos .form-container-fullwidth {
-    max-width: none !important;  /* Force remove width constraint */
-    margin: 0 !important;        /* Force remove auto centering */
-    width: 100% !important;      /* Force full width */
-    padding: 20px 40px !important; /* Force side padding */
-    box-sizing: border-box !important;
-}
-
-/* Estilos específicos para la página de búsqueda */
-.busqueda-form-group {
-    max-width: 400px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.busqueda-button-group {
-    max-width: 400px;
-    margin: 30px auto 0 auto;
-    text-align: center;
-}
-
-.busqueda-input {
-    width: 300px;
-}
-
-.busqueda-button {
-    width: auto;
-    padding: 12px 20px;
-}
-
-.busqueda-resumen {
-    margin-top: 40px;
-}
-
-.busqueda-resultados {
-    margin-top: 20px;
-}
-
-/* Estilos para la sección Monitor de actividad (tabla de sesiones) */
-#divListaSesiones {
-    margin-top: 30px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-}
-
-#divListaSesiones h3 {
-    color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2rem;
-}
-
-#divListaSesiones table,
-.content #divListaSesiones table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    background-color: white;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-#divListaSesiones th,
-#divListaSesiones td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-    vertical-align: middle;
-}
-
-#divListaSesiones th {
-    background-color: #f2f2f2;
-    font-weight: 600;
-}
-
-#divListaSesiones tr:nth-child(even) {
-    background-color: #fafafa;
-}
-
-#divListaSesiones tr:hover {
-    background-color: #f1f1f1;
-}
-
-#divListaSesiones .acciones-cell {
-    white-space: nowrap;
-}
+        /* Estilos del Modal */
+        #mensajeDlg {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.6); 
+            z-index: 9999; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        #mensajeDlg .modal-content {
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4); 
+            max-width: 400px; 
+            width: 90%; 
+            text-align: center; 
+        }
+        
+        #botonAceptar {
+            background-color: var(--color-primary); 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            transition: background-color 0.3s; 
+        }
+        
+        #botonAceptar:hover {
+            background-color: var(--color-secondary); 
+        }
