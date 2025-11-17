@@ -1,4 +1,5 @@
 package com.example.obligatorioPeajes.modelo;
+
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ public class Propietario extends Usuario {
 	private Collection<Vehiculo> vehiculos;
 
 	public Propietario(String cedula, String nombreCompleto, String contrasenia,
-	 double saldoActual, double saldoMinimoAlerta) {
+			double saldoActual, double saldoMinimoAlerta) {
 		super(cedula, nombreCompleto, contrasenia);
 		this.saldoActual = saldoActual;
 		this.saldoMinimoAlerta = saldoMinimoAlerta;
@@ -31,33 +32,41 @@ public class Propietario extends Usuario {
 		this.estado = ServicioUsuario.getInstancia().getEstadoHabilitado();
 	}
 
-    public int getId() {
-        return id;
-    }
-    public double getSaldoActual() {
-        return saldoActual;
-    }
-    public double getSaldoMinimoAlerta() {
-        return saldoMinimoAlerta;
-    }
-    public EstadoPropietario getEstado() {
-        return estado;
-    }
-    public List<BonificacionAsignada> getBonificacionesAsignadas() {
-        return bonificacionesAsignadas;
-    }
-    public List<Notificacion> getNotificaciones() {
-        return notificaciones;
-    }
-    public String getNombre() {
-        return super.getNombreCompleto();
-    }
-    public String getCedula(){
-        return super.getCedula();
-    }
-    public Collection<Vehiculo> getVehiculos() {
-        return vehiculos;
-    }
+	public int getId() {
+		return id;
+	}
+
+	public double getSaldoActual() {
+		return saldoActual;
+	}
+
+	public double getSaldoMinimoAlerta() {
+		return saldoMinimoAlerta;
+	}
+
+	public EstadoPropietario getEstado() {
+		return estado;
+	}
+
+	public List<BonificacionAsignada> getBonificacionesAsignadas() {
+		return bonificacionesAsignadas;
+	}
+
+	public List<Notificacion> getNotificaciones() {
+		return notificaciones;
+	}
+
+	public String getNombre() {
+		return super.getNombreCompleto();
+	}
+
+	public String getCedula() {
+		return super.getCedula();
+	}
+
+	public Collection<Vehiculo> getVehiculos() {
+		return vehiculos;
+	}
 
 	public void agregarVehiculo(Vehiculo v) {
 		this.vehiculos.add(v);
@@ -90,15 +99,17 @@ public class Propietario extends Usuario {
 	public boolean tieneBonificacionesEn(PuestoDePeaje puesto) {
 		return false;
 	}
-    public void agregarBonificacionAsignada(BonificacionAsignada ba) {
-        if(ba == null) return;
-        if(!this.bonificacionesAsignadas.contains(ba)){
-            this.bonificacionesAsignadas.add(ba);
-        } 
-    }
-    
-    public List<BonificacionAsignada> obtenerBonificacionesAsignadas() {
-        return new ArrayList<>(this.bonificacionesAsignadas);
-    }
+
+	public void agregarBonificacionAsignada(BonificacionAsignada ba) {
+		if (ba == null)
+			return;
+		if (!this.bonificacionesAsignadas.contains(ba)) {
+			this.bonificacionesAsignadas.add(ba);
+		}
+	}
+
+	public List<BonificacionAsignada> obtenerBonificacionesAsignadas() {
+		return new ArrayList<>(this.bonificacionesAsignadas);
+	}
 
 }

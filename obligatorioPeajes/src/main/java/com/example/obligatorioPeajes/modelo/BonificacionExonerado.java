@@ -10,9 +10,9 @@ public class BonificacionExonerado extends Bonificacion {
 		return 0;
 	}
 
-    @Override
-    public double calcularMontoFijo(Transito t, PuestoDePeaje puesto) {
-        return t.getTarifaBase();
-    }
+	@Override
+	public double calcularMontoFijo(Transito t, PuestoDePeaje puesto) {
+		return t.getTarifaBase();
+	}
 
 }

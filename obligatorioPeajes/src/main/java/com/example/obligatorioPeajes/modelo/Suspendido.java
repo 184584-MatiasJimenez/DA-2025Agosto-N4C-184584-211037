@@ -2,14 +2,12 @@ package com.example.obligatorioPeajes.modelo;
 
 public class Suspendido implements EstadoPropietario {
 
-
 	/**
 	 * @see EstadoPropietario#puedeAsignarBonificacion()
 	 */
 	public boolean puedeAsignarBonificacion() {
 		return false;
 	}
-
 
 	/**
 	 * @see EstadoPropietario#puedeAplicarBonificacion()
@@ -18,14 +16,12 @@ public class Suspendido implements EstadoPropietario {
 		return false;
 	}
 
-
 	/**
 	 * @see EstadoPropietario#puedeRecibirNotificaciones()
 	 */
 	public boolean puedeRecibirNotificaciones() {
 		return false;
 	}
-
 
 	/**
 	 * @see EstadoPropietario#puedeRealizarTransito()
@@ -34,10 +30,9 @@ public class Suspendido implements EstadoPropietario {
 		return false;
 	}
 
-
-    public static EstadoPropietario getInstancia() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
-    }
+	public static EstadoPropietario getInstancia() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
+	}
 
 }

@@ -2,7 +2,6 @@ package com.example.obligatorioPeajes.modelo;
 
 public class TarifaCamion implements EstrategiaTarifa {
 
-
 	/**
 	 * @see EstrategiaTarifa#calcularTarifa(Vehiculo, double)
 	 */
