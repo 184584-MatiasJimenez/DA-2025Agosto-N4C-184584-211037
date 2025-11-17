@@ -1,10 +1,11 @@
-package com.example.obligatorioPeajes.modelo;
+package com.example.obligatorioPeajes.servicios;
+import com.example.obligatorioPeajes.modelo.*;
 
 import java.util.Collection;
 
-public class SistemaTransito {
+public class ServicioTransito {
 
-    private static SistemaTransito instancia;
+    private static ServicioTransito instancia;
 	private Collection<Transito> transito;
     private Collection<Tarifa> tarifas;
     private Collection<PuestoDePeaje> puestosDePeaje;
@@ -24,9 +25,9 @@ public class SistemaTransito {
 		return null;
 	}
 
-    public static SistemaTransito getInstancia() {
+    public static ServicioTransito getInstancia() {
        if(instancia == null) {
-           instancia = new SistemaTransito();
+           instancia = new ServicioTransito();
        }
        return instancia;
     }

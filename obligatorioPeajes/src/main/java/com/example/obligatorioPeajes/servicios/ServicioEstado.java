@@ -1,7 +1,8 @@
-package com.example.obligatorioPeajes.modelo;
+package com.example.obligatorioPeajes.servicios;
+import com.example.obligatorioPeajes.modelo.*;
 
-public class SistemaEstado {
-    private static SistemaEstado instancia;
+public class ServicioEstado {
+    private static ServicioEstado instancia;
 
     private EstadoPropietario estadoHabilitado;
     private EstadoPropietario estadoDeshabilitado;
@@ -11,7 +12,7 @@ public class SistemaEstado {
     private EstadoFrecuente estadoPrimerTransito;
     private EstadoFrecuente estadoFrecuenteDia;
 
-    private SistemaEstado() {
+    private ServicioEstado() {
         this.estadoHabilitado = Habilitado.getInstancia();
         this.estadoDeshabilitado = Deshabilitado.getInstancia();
         this.estadoSuspendido = Suspendido.getInstancia();
@@ -19,9 +20,9 @@ public class SistemaEstado {
 
     }
 
-    public static SistemaEstado getInstancia() {
+    public static ServicioEstado getInstancia() {
         if(instancia == null) {
-            instancia = new SistemaEstado();
+            instancia = new ServicioEstado();
         }
         return instancia;
     }

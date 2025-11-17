@@ -1,8 +1,8 @@
 package com.example.obligatorioPeajes.modelo;
-
+import com.example.obligatorioPeajes.servicios.ServicioUsuario;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
 
 public class Propietario extends Usuario {
 
@@ -28,7 +28,7 @@ public class Propietario extends Usuario {
 		this.bonificacionesAsignadas = new ArrayList<>();
 		this.notificaciones = new ArrayList<>();
 		this.vehiculos = new ArrayList<>();
-		this.estado = SistemaUsuario.getInstancia().getEstadoHabilitado();
+		this.estado = ServicioUsuario.getInstancia().getEstadoHabilitado();
 	}
 
     public int getId() {
@@ -58,7 +58,6 @@ public class Propietario extends Usuario {
     public Collection<Vehiculo> getVehiculos() {
         return vehiculos;
     }
-
 
 	public void agregarVehiculo(Vehiculo v) {
 		this.vehiculos.add(v);

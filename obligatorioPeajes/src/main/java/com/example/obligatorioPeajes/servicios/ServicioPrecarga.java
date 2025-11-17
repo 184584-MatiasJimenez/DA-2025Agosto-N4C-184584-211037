@@ -1,14 +1,15 @@
-package com.example.obligatorioPeajes.modelo;
-
+package com.example.obligatorioPeajes.servicios;
+import com.example.obligatorioPeajes.modelo.*;
+	
 import java.time.LocalDateTime;
 
-public class SistemaPrecarga {
+public class ServicioPrecarga {
 
 
 	public void cargarDatosIniciales() {
-		SistemaUsuario sistemaUsuario = SistemaUsuario.getInstancia();
-		SistemaTransito sistemaTransito = SistemaTransito.getInstancia();
-		SistemaBonificacion sistemaBonificacion = SistemaBonificacion.getInstancia();
+		ServicioUsuario sistemaUsuario = ServicioUsuario.getInstancia();
+		ServicioTransito sistemaTransito = ServicioTransito.getInstancia();
+		ServicioBonificacion sistemaBonificacion = ServicioBonificacion.getInstancia();
 
 		//Precarga de estados de propietarios
 		sistemaUsuario.precargaEstados();

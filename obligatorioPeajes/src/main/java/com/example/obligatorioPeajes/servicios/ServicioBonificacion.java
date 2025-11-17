@@ -1,16 +1,17 @@
-package com.example.obligatorioPeajes.modelo;
+package com.example.obligatorioPeajes.servicios;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.time.LocalDateTime;
+import com.example.obligatorioPeajes.modelo.*;
 
-public class SistemaBonificacion {
-    private static SistemaBonificacion instancia;
+public class ServicioBonificacion {
+    private static ServicioBonificacion instancia;
 
 	private Collection<BonificacionAsignada> bonificacionAsignada;
 
 	private Collection<Bonificacion> bonificacion;
 
-    private SistemaBonificacion() {
+    private ServicioBonificacion() {
         this.bonificacionAsignada = new ArrayList<>();
         this.bonificacion = new ArrayList<>();
         this.precargarTiposBonificacion();
@@ -25,9 +26,9 @@ public class SistemaBonificacion {
         this.bonificacion.add(trabajador);
 	}
 
-    public static SistemaBonificacion getInstancia() {
+    public static ServicioBonificacion getInstancia() {
         if(instancia == null) {
-            instancia = new SistemaBonificacion();
+            instancia = new ServicioBonificacion();
         }
         return instancia;
     }
@@ -47,7 +48,7 @@ public class SistemaBonificacion {
 	}
 
     public BonificacionAsignada asignarBonificacion(Propietario propietario, PuestoDePeaje puesto, Bonificacion bonificacion) {
-        EstadoFrecuente estadoInicial = SistemaEstado.getInstancia().getEstadoPrimerTransito();
+        EstadoFrecuente estadoInicial = ServicioEstado.getInstancia().getEstadoPrimerTransito();
         BonificacionAsignada ba = new BonificacionAsignada(new DateTime(LocalDateTime.now()), propietario, bonificacion, puesto, estadoInicial);
         this.bonificacionAsignada.add(ba);
         propietario.agregarBonificacionAsignada(ba);

@@ -1,15 +1,21 @@
-package com.example.obligatorioPeajes.modelo;
+package com.example.obligatorioPeajes.servicios.fachada;
+import com.example.obligatorioPeajes.modelo.*;
+import com.example.obligatorioPeajes.servicios.ServicioBonificacion;
+import com.example.obligatorioPeajes.servicios.ServicioPrecarga;
+import com.example.obligatorioPeajes.servicios.ServicioTransito;
+import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 
 public class Fachada {
 
     private static Fachada instancia;
-    private SistemaUsuario sistemaUsuario;
-    private SistemaTransito sistemaTransito;
-    private SistemaBonificacion sistemaBonificacion;
+    private ServicioUsuario servicioUsuario;
+    private ServicioTransito servicioTransito;
+    private ServicioBonificacion servicioBonificacion;
+	
     private Fachada() {
-        this.sistemaUsuario = SistemaUsuario.getInstancia();
-        this.sistemaTransito = SistemaTransito.getInstancia();
-        this.sistemaBonificacion = SistemaBonificacion.getInstancia();
+        this.servicioUsuario = ServicioUsuario.getInstancia();
+        this.servicioTransito = ServicioTransito.getInstancia();
+        this.servicioBonificacion = ServicioBonificacion.getInstancia();
     }
 
 	public static Fachada getInstance() {
@@ -20,20 +26,20 @@ public class Fachada {
 	}
 
 	public Usuario login(String cedula, String contrasenia) {
-		boolean loginExitoso = this.sistemaUsuario.iniciarSesion(cedula, contrasenia);
+		boolean loginExitoso = this.servicioUsuario.iniciarSesion(cedula, contrasenia);
         if(loginExitoso) {
-            return this.sistemaUsuario.buscarPropietarioPorCI(cedula);
+            return this.servicioUsuario.buscarPropietarioPorCI(cedula);
         }
         return null;
 	}
 
 	public void precargaDatosIniciales() {
-        SistemaPrecarga precarga = new SistemaPrecarga();
+        ServicioPrecarga precarga = new ServicioPrecarga();
         precarga.cargarDatosIniciales();
 	}
 
 	public void logout(String cedula) {
-        this.sistemaUsuario.registrarLogout();
+        this.servicioUsuario.registrarLogout();
 	}
 
 	public Propietario obtenerDatosPropietario(String cedula) {
@@ -61,7 +67,7 @@ public class Fachada {
 	}
 
 	public Propietario buscarPropietarioPorCI(String ci) {
-		return SistemaUsuario.getInstancia().buscarPropietarioPorCI(ci);
+		return this.servicioUsuario.buscarPropietarioPorCI(ci);
 	}
 
 	public java.util.List<PuestoDePeaje> obtenerListaPuestos() {

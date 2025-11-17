@@ -1,10 +1,11 @@
-package com.example.obligatorioPeajes.modelo;
+package com.example.obligatorioPeajes.servicios;
+import com.example.obligatorioPeajes.modelo.*;
 
 import java.util.Collection;
 
-public class SistemaUsuario {
+public class ServicioUsuario {
 
-	private static SistemaUsuario instancia;
+	private static ServicioUsuario instancia;
     private Usuario usuarioLogueado;
 	private Collection<Usuario> usuarios;
     private EstadoPropietario estadoHabilitado;
@@ -12,14 +13,14 @@ public class SistemaUsuario {
     private EstadoPropietario estadoSuspendido;
     private EstadoPropietario estadoPenalizado;
 
-    private SistemaUsuario() {
+    private ServicioUsuario() {
         this.usuarios = new java.util.ArrayList<>();
         this.precargaEstados();
     }
 
-	public static SistemaUsuario getInstancia() {
+	public static ServicioUsuario getInstancia() {
 		if (instancia == null) {
-			instancia = new SistemaUsuario();
+			instancia = new ServicioUsuario();
 		}
 		return instancia;
 	}
