@@ -19,6 +19,10 @@ public class ServicioPrecarga {
 		CategoriaVehiculo catCamioneta = new CategoriaVehiculo("Camioneta");
 		CategoriaVehiculo categoriaMoto = new CategoriaVehiculo("Moto");
 
+		sistemaTransito.agregarCategoria(categoriaAuto);
+		sistemaTransito.agregarCategoria(catCamioneta);
+		sistemaTransito.agregarCategoria(categoriaMoto);
+
 		//tipos de bonificaciones
 		sistemaBonificacion.precargarTiposBonificacion();
 
@@ -27,6 +31,7 @@ public class ServicioPrecarga {
 		PuestoDePeaje puesto2 = sistemaTransito.agregarPuestoDePeaje("Puesto Norte", "Ruta 5 km 50");
         PuestoDePeaje puesto3 = sistemaTransito.agregarPuestoDePeaje("Puesto Sur", "Ruta 10 km 100");
         PuestoDePeaje puesto4 = sistemaTransito.agregarPuestoDePeaje("Puesto Este", "Ruta 15 km 150");
+
         
         //agregar tarifas - Puesto Central (puesto1)
         sistemaTransito.agregarTarifa(puesto1, categoriaAuto, 100.0);
@@ -62,28 +67,28 @@ public class ServicioPrecarga {
 		Propietario propC = (Propietario) sistemaUsuario.buscarUsuarioPorCI("22345675");
 		Propietario propD = (Propietario) sistemaUsuario.buscarUsuarioPorCI("23345674");
 		Propietario propE = (Propietario) sistemaUsuario.buscarUsuarioPorCI("24345673");
-		//Agregar vehiculos
-		categoriaAuto = sistemaTransito.buscarCategoriaPorNombre("Automóvil");
-		sistemaUsuario.agregarVehiculo(propA, "ABC123", "Toyota", "Corolla", "Rojo", 2020, categoriaAuto);
-		sistemaUsuario.agregarVehiculo(propB, "DEF456", "Honda", "Civic", "Azul", 2019, categoriaAuto);
-		sistemaUsuario.agregarVehiculo(propC, "GHI789", "Ford", "Focus", "Negro", 2021, categoriaAuto);
+        EstadoPropietario estadoDeshabilitado = sistemaUsuario.getEstadoDeshabilitado();
+        propB.setEstado(estadoDeshabilitado);
+		// Agregar vehiculos - *** USO DIRECTO DE VARIABLES DE CATEGORÍA ***
+        sistemaUsuario.agregarVehiculo(propA, "ABC123", "Toyota", "Corolla", "Rojo", 2020, categoriaAuto);
+        sistemaUsuario.agregarVehiculo(propB, "DEF456", "Honda", "Civic", "Azul", 2019, categoriaAuto);
+        sistemaUsuario.agregarVehiculo(propC, "GHI789", "Ford", "Focus", "Negro", 2021, categoriaAuto);
         
-		categoriaMoto = sistemaTransito.buscarCategoriaPorNombre("Moto");
-		sistemaUsuario.agregarVehiculo(propD, "MOTO1", "Yamaha", "YZF-R3", "Blanco", 2021, categoriaMoto);
-		sistemaUsuario.agregarVehiculo(propE, "MOTO2", "Kawasaki", "Ninja 400", "Verde", 2020, categoriaMoto);  
-		catCamioneta = sistemaTransito.buscarCategoriaPorNombre("Camioneta");
-		sistemaUsuario.agregarVehiculo(propC, "CAMIONETA1", "Chevrolet", "Trax", "Gris", 2022, catCamioneta);
-		sistemaUsuario.agregarVehiculo(propA, "CAMIONETA2", "Jeep", "Renegade", "Blanco", 2018, catCamioneta);
+        sistemaUsuario.agregarVehiculo(propD, "MOTO1", "Yamaha", "YZF-R3", "Blanco", 2021, categoriaMoto);
+        sistemaUsuario.agregarVehiculo(propE, "MOTO2", "Kawasaki", "Ninja 400", "Verde", 2020, categoriaMoto); 
+        
+        sistemaUsuario.agregarVehiculo(propC, "CAMIONETA1", "Chevrolet", "Trax", "Gris", 2022, catCamioneta);
+        sistemaUsuario.agregarVehiculo(propA, "CAMIONETA2", "Jeep", "Renegade", "Blanco", 2018, catCamioneta);
 
-        //Simular Tránsito
-        sistemaTransito.registrarTransito("ABC123", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 8, 30)));
+		sistemaTransito.registrarTransito("ABC123", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 8, 30)));
         sistemaTransito.registrarTransito("DEF456", "Puesto Norte", new DateTime(LocalDateTime.of(2024, 6, 1, 9, 15)));
         sistemaTransito.registrarTransito("GHI789", "Puesto Sur", new DateTime(LocalDateTime.of(2024, 6, 1, 10, 0)));
         sistemaTransito.registrarTransito("MOTO1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 11, 45)));
         sistemaTransito.registrarTransito("MOTO2", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 12, 30)));
         sistemaTransito.registrarTransito("CAMIONETA1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 13, 15)));
         sistemaTransito.registrarTransito("CAMIONETA2", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 14, 0)));
-        
+		
+		//buscar bonificaciones
         Bonificacion bonifExonerado = sistemaBonificacion.buscarBonificacionPorNombre("Exonerado");
         Bonificacion bonifFrecuente = sistemaBonificacion.buscarBonificacionPorNombre("Frecuente");
         Bonificacion bonifTrabajador = sistemaBonificacion.buscarBonificacionPorNombre("Trabajador");

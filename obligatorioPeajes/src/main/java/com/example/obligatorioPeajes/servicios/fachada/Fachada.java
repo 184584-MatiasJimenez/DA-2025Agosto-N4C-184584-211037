@@ -1,11 +1,17 @@
 package com.example.obligatorioPeajes.servicios.fachada;
 import com.example.obligatorioPeajes.modelo.*;
+import com.example.obligatorioPeajes.observador.Observable;
 import com.example.obligatorioPeajes.servicios.ServicioBonificacion;
 import com.example.obligatorioPeajes.servicios.ServicioPrecarga;
 import com.example.obligatorioPeajes.servicios.ServicioTransito;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
+import com.example.obligatorioPeajes.excepciones.UsuarioException;
 
-public class Fachada {
+public class Fachada extends Observable {
+	public enum Eventos{
+		nuevoUsuarioConectado,
+		nuevoUsuarioDesconectado
+	}
 
     private static Fachada instancia;
     private ServicioUsuario servicioUsuario;
@@ -25,12 +31,8 @@ public class Fachada {
         return instancia;
 	}
 
-	public Usuario login(String cedula, String contrasenia) {
-		boolean loginExitoso = this.servicioUsuario.iniciarSesion(cedula, contrasenia);
-        if(loginExitoso) {
-            return this.servicioUsuario.buscarPropietarioPorCI(cedula);
-        }
-        return null;
+	public Sesion login(String cedula, String contrasenia) throws UsuarioException {
+		return this.servicioUsuario.loginPropietario(cedula, contrasenia);
 	}
 
 	public void precargaDatosIniciales() {
@@ -38,10 +40,9 @@ public class Fachada {
         precarga.cargarDatosIniciales();
 	}
 
-	public void logout(String cedula) {
-        this.servicioUsuario.registrarLogout();
+	public void logout(Sesion s) {
+        this.servicioUsuario.logout(s);
 	}
-
 	public Propietario obtenerDatosPropietario(String cedula) {
 		return null;
 	}
@@ -93,6 +94,8 @@ public class Fachada {
 	public Transito emularTransito(String matricula, String nombrePuesto, DateTime fechaHora) {
 		return null;
 	}
-
+	public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
+		return this.servicioUsuario.loginAdministrador(cedula, contrasenia);
+	}
 
 }

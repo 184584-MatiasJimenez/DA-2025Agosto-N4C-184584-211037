@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obligatorio Peajes</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+    
+    <div id="main-app-container">
+        
+        <div id="login-view">
+            <h2>Ingreso a la Aplicación</h2>
+            <form id="loginForm" onsubmit="loginPropietario(event);">
+                <div class="form-group">
+                    <label for="cedula">Cédula:</label>
+                    <input type="text" id="cedula" name="cedula" required>
+                </div>
+                <div class="form-group">
+                    <label for="contrasenia">Contraseña:</label>
+                    <input type="password" id="contrasenia" name="contrasenia" required>
+                </div>
+                <button type="submit" class="btn-ingresar">Ingresar</button>
+            </form>
+        </div>
+
+        <div id="cu-views" style="display:none;">
+            <h1>Tablero de Control (SPA Content)</h1>
+        </div>
+
+    </div>
+    
+    <script src="/utilesVista.js"></script> 
+    <script src="/vistaWeb.js"></script>
+    
+    <script>
+        const URL_LOGIN = "/acceso/ingresoPropietario";
+
+        function loginPropietario(event) {
+            event.preventDefault(); 
+            const datos = serializarFormulario("loginForm"); 
+            submit(URL_LOGIN, datos, "POST");
+        }
+        
+        let estadoAplicacion = {};
+
+        function mostrar_loginExitoso(parametro) {
+            console.log("Login correcto:", parametro);
+            mostrarMensaje("Bienvenido!");
+        }
+
+        function mostrar_datosPropietario(nombreCompleto) {
+            const ciUsuario =document.getElementById("cedula").value;
+            localStorage.setItem('ciUsuarioLogueado', ciUsuario);
+            localStorage.setItem('nombreUsuarioLogueado', nombreCompleto);
+            if (estadoAplicacion.usuario === undefined || estadoAplicacion.usuario === null) {
+                estadoAplicacion.usuario = {};
+            }
+            estadoAplicacion.usuario.nombreCompleto = nombreCompleto;
+            estadoAplicacion.usuario.cedula = ciUsuario;
+            document.getElementById("login-view").style.display = "none";
+            document.getElementById("cu-views").style.display = "block";
+
+            if (typeof cargarTableroControl === 'function') {
+             cargarTableroControl(nombreCompleto); 
+            }
+            mostrarMensaje("¡Bienvenido, " + nombreCompleto + "!");
+        }
+
+
+        function mostrar_loginError(parametro) {
+            
+            mostrarMensaje("Error: " + parametro);
+        }
+
+        window.onload = function() {
+            const ciGuardada = localStorage.getItem('ciUsuarioLogueado');
+            const nombreGuardado = localStorage.getItem('nombreUsuarioLogueado');
+
+            if (ciGuardada) {
+                // Restaurar estado
+                if (!estadoAplicacion.usuario) {
+                    estadoAplicacion.usuario = {};
+                }
+                estadoAplicacion.usuario.ci = ciGuardada;
+                estadoAplicacion.usuario.nombreCompleto = nombreGuardado;
+                
+                // Cambiar vistas
+                document.getElementById("login-view").style.display = "none";
+                document.getElementById("cu-views").style.display = "block";
+                
+                // Recargar el contenido del Tablero
+                if (typeof cargarTableroControl === 'function') {
+                    cargarTableroControl(nombreGuardado);
+                    mostrarMensaje("Sesión restaurada.");
+                }
+            } else {
+                // Asegurar que solo se vea la vista de login si no hay sesión
+                document.getElementById("login-view").style.display = "block";
+                document.getElementById("cu-views").style.display = "none";
+            }
+        }
+
+    </script>
+
+</body>
+</html>

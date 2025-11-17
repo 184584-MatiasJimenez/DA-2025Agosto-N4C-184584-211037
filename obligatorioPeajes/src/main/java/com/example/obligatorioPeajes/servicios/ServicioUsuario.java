@@ -1,13 +1,18 @@
 package com.example.obligatorioPeajes.servicios;
+import com.example.obligatorioPeajes.excepciones.UsuarioException;
 import com.example.obligatorioPeajes.modelo.*;
+import com.example.obligatorioPeajes.servicios.fachada.Fachada;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
 
 public class ServicioUsuario {
 
 	private static ServicioUsuario instancia;
     private Usuario usuarioLogueado;
 	private Collection<Usuario> usuarios;
+    private ArrayList<Sesion> sesiones = new ArrayList<>();
     private EstadoPropietario estadoHabilitado;
     private EstadoPropietario estadoDeshabilitado;
     private EstadoPropietario estadoSuspendido;
@@ -45,6 +50,7 @@ public class ServicioUsuario {
         return this.estadoPenalizado;
     }
 
+
 	public Usuario validarCredenciales(String cedula, String contrasenia) {
 		Usuario usuario = this.buscarUsuarioPorCI(cedula);
         if(usuario != null && usuario.verificarContrasenia(contrasenia)){
@@ -52,16 +58,40 @@ public class ServicioUsuario {
         }
         return null;
 	}
-    public boolean iniciarSesion(String cedula, String contrasenia) {
+
+    public Sesion loginPropietario(String cedula, String contrasenia) throws UsuarioException{
         Usuario usuario = this.validarCredenciales(cedula, contrasenia);
-        if(usuario != null) {
-            this.usuarioLogueado = usuario;
-            return true;
+        if(usuario == null) {
+            throw new UsuarioException("Acceso denegado");
         }
-        return false;
+        if(!(usuario instanceof Propietario propietario)) {
+            throw new UsuarioException("El usuario no es un propietario");
+        }
+        if(propietario.estaDeshabilitado()) {
+            throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
+        }
+        Sesion sesion = new Sesion(propietario);
+        this.sesiones.add(sesion);
+        Fachada.getInstance().avisar(Fachada.Eventos.nuevoUsuarioConectado);
+        this.usuarioLogueado = propietario;
+        return sesion;
     }
-	public void registrarLogout() {
-        this.usuarioLogueado = null;
+    public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException{
+        Usuario usuario = this.validarCredenciales(cedula, contrasenia);
+
+        if(usuario == null) {
+            throw new UsuarioException("Acceso denegado");
+        }
+        if(!(usuario instanceof Administrador administrador)) {
+            throw new UsuarioException("El usuario no es un administrador");
+        }
+        this.usuarioLogueado = administrador;
+        return administrador;
+    }
+
+	public void logout(Sesion s) {
+        sesiones.remove(s);
+        Fachada.getInstance().avisar(Fachada.Eventos.nuevoUsuarioDesconectado);
 	}
 
 	public void agregarPropietario(String cedula, String nombreCompleto, String contrasenia, double SaldoActual,

@@ -30,6 +30,7 @@ public class Propietario extends Usuario {
 		this.vehiculos = new ArrayList<>();
 		this.estado = ServicioUsuario.getInstancia().getEstadoHabilitado();
 	}
+	
 
     public int getId() {
         return id;
@@ -43,6 +44,9 @@ public class Propietario extends Usuario {
     public EstadoPropietario getEstado() {
         return estado;
     }
+	public void setEstado(EstadoPropietario estado) {
+		this.estado = estado;
+	}
     public List<BonificacionAsignada> getBonificacionesAsignadas() {
         return bonificacionesAsignadas;
     }
@@ -100,5 +104,8 @@ public class Propietario extends Usuario {
     public List<BonificacionAsignada> obtenerBonificacionesAsignadas() {
         return new ArrayList<>(this.bonificacionesAsignadas);
     }
+	public boolean estaDeshabilitado() {
+		return this.estado.esDeshabilitado();
+	}
 
 }

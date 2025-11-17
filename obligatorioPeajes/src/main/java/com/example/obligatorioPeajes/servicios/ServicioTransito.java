@@ -9,6 +9,14 @@ public class ServicioTransito {
 	private Collection<Transito> transito;
     private Collection<Tarifa> tarifas;
     private Collection<PuestoDePeaje> puestosDePeaje;
+    private Collection<CategoriaVehiculo> categoriasVehiculos;
+
+    private ServicioTransito() {
+        this.transito = new java.util.ArrayList<>();
+        this.tarifas = new java.util.ArrayList<>();
+        this.puestosDePeaje = new java.util.ArrayList<>();
+        this.categoriasVehiculos = new java.util.ArrayList<>();
+    }
 
     public Collection<Tarifa> getTarifas() {
         return tarifas;
@@ -39,13 +47,21 @@ public class ServicioTransito {
     }
 
     public CategoriaVehiculo buscarCategoriaPorNombre(String nombre) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buscarCategoriaPorNombre'");
+        for (CategoriaVehiculo cat : this.categoriasVehiculos) {
+            if (cat.getNombre().equalsIgnoreCase(nombre)) {
+                return cat;
+            }
+        }
+        return null;
     }
 
     public void agregarTarifa(PuestoDePeaje puesto, CategoriaVehiculo categoria, double monto) {
         Tarifa tarifa = new Tarifa(puesto, categoria, monto);
         this.tarifas.add(tarifa);
+    }
+
+    public void agregarCategoria(CategoriaVehiculo categoria) {
+        this.categoriasVehiculos.add(categoria);
     }
 
 }

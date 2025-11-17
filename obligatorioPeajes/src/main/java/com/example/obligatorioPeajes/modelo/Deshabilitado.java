@@ -2,7 +2,7 @@ package com.example.obligatorioPeajes.modelo;
 
 public class Deshabilitado implements EstadoPropietario {
 
-
+	public static Deshabilitado instancia;
 	/**
 	 * @see EstadoPropietario#puedeAsignarBonificacion()
 	 */
@@ -10,7 +10,10 @@ public class Deshabilitado implements EstadoPropietario {
 		return false;
 	}
 
-
+	@Override
+    public boolean esDeshabilitado() {
+        return true; // Solo este estado devuelve true
+    }
 	/**
 	 * @see EstadoPropietario#puedeAplicarBonificacion()
 	 */
@@ -36,8 +39,10 @@ public class Deshabilitado implements EstadoPropietario {
 
 
     public static EstadoPropietario getInstancia() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
+        if (instancia == null) {
+            instancia = new Deshabilitado();
+        }
+        return instancia;
     }
 
 }
