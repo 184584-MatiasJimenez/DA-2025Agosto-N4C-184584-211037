@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Obligatorio Peajes</title>
     <link rel="stylesheet" href="css/estilos.css">
+    <script src="vistaWeb.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Estilos esenciales y para el modal */
@@ -113,11 +114,11 @@
 </head>
 
 <body>
+    <script src="utilesVista.js"></script>
     <div id="main-app-container">
-
         <div id="login-view">
             <h2>Ingreso a la Aplicación</h2>
-            <form id="loginForm" onsubmit="loginPropietario(event);">
+            <form id="loginForm" onsubmit="acceder(event);">
                 <div class="form-group">
                     <label for="cedula">Cédula:</label>
                     <input type="text" id="cedula" name="cedula" required>
@@ -132,54 +133,6 @@
 
         <div id="cu-views" style="display:none;">
         </div>
-
-    </div>
-    <!-- VISTA 2: TABLERO (Antes era tableroControl.html) -->
-    <!-- Se usa 'dashboard-view' en lugar de 'cu-views' para mayor claridad. Oculto por defecto. -->
-    <div id="dashboard-view" style="display:none;" class="p-6">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-6">
-            <h1 class="text-3xl font-extrabold text-gray-800 mb-4 md:mb-0">Tablero de Control del Propietario</h1>
-            <button onclick="logoutPropietario();"
-                class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
-                Cerrar Sesión
-            </button>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-blue-100 p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
-                <h2 class="text-lg font-semibold text-gray-600">Propietario</h2>
-                <div id="nombre-completo-value" class="text-3xl font-bold text-gray-900 mt-1">...</div>
-            </div>
-            <div class="bg-green-100 p-6 rounded-xl shadow-lg border-l-4 border-green-500">
-                <h2 class="text-lg font-semibold text-gray-600">Estado de la Cuenta</h2>
-                <div id="estado-value" class="text-3xl font-bold text-green-600 mt-1">Activo</div>
-            </div>
-            <div class="bg-yellow-100 p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
-                <h2 class="text-lg font-semibold text-gray-600">Saldo Disponible</h2>
-                <div id="saldo-value" class="text-3xl font-bold text-yellow-600 mt-1">$ 0.00</div>
-            </div>
-        </div>
-
-        <h2 class="text-2xl font-semibold mt-8 mb-4 border-l-4 border-primary pl-3 text-gray-800">Vehículos Registrados
-        </h2>
-        <div class="overflow-x-auto bg-white rounded-lg shadow-md mb-8">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100 text-gray-600">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Matrícula</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Modelo</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Color</th>
-                    </tr>
-                </thead>
-                <tbody id="vehiculos-body" class="bg-white divide-y divide-gray-200">
-                    <tr class="text-gray-500">
-                        <td colspan="3" class="px-6 py-4 text-center">Cargando vehículos...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
     </div>
 
     <!-- Modal de Mensajes (reemplaza a alert/confirm) -->
@@ -190,155 +143,25 @@
             <button id="botonAceptar">Aceptar</button>
         </div>
     </div>
+
     <script>
-        // --- CONSTANTES ---
-        const URL_LOGIN = "/acceso/ingresoPropietario";
-        const URL_LOGOUT = "/acceso/logout";
-        let estadoAplicacion = {};
-
-        // --- FUNCIONES DE UTILDAD/SIMULACIÓN ---
-
-        window.cerrarDialogoMensaje = function () { document.getElementById('mensajeDlg').style.display = 'none'; }
-        window.mostrarMensaje = function (textoMensaje) {
-            return new Promise((resolve) => {
-                document.getElementById('textoMensaje').textContent = textoMensaje;
-                document.getElementById('mensajeDlg').style.display = 'flex';
-                document.getElementById('botonAceptar').onclick = function () { window.cerrarDialogoMensaje(); resolve(); };
-            });
-        };
-
-        window.serializarFormulario = function (formId) {
-            const form = document.getElementById(formId);
-            return form ? new FormData(form) : new FormData();
-        }
-
-        function procesarResultadosSubmit(respuestas) {
-            if (!Array.isArray(respuestas) || respuestas.length === 0) {
-                mostrarMensaje("Respuesta vacía del servidor.");
-                return;
-            }
-
-            const accionPrincipal = respuestas[0];
-            const clave = accionPrincipal.clave;
-            const valor = accionPrincipal.valor;
-            const datosAdicionales = respuestas.slice(1);
-
-            if (clave === "loginExitoso") {
-                const nombreCompleto = datosAdicionales.find(d => d.clave === 'datosPropietario')?.valor || valor;
-                if (typeof mostrar_datosPropietario === 'function') {
-                    mostrar_datosPropietario(nombreCompleto);
-                }
-                return;
-            }
-
-            const nombreFuncion = `mostrar_${clave}`;
-            const funcionCallback = window[nombreFuncion];
-
-            if (typeof funcionCallback === 'function') {
-                funcionCallback(valor);
-            } else {
-                mostrarMensaje(`Acción ${clave} completada: ${valor}`);
-            }
-        }
         // --- MANEJO DE SESIÓN ---
-        function loginPropietario(event) {
+        function acceder(event) {
             event.preventDefault();
-            const datos = serializarFormulario("loginForm");
-            submit(URL_LOGIN, datos, "POST");
+            submit("acceso/ingresoPropietario", serializarFormulario("loginForm"));
         }
 
-        function logoutPropietario() {
-            submit(URL_LOGOUT, {}, "POST");
-        }
-        function inicializarSubmit() {
-            if (window.submitRegistrado) return;
-            window.submitRegistrado = true;
-
-            window.submit = async function (url, datos, metodo) {
-                const loadingText = url.includes('login') ? "Verificando credenciales..." : "Ingresando...";
-                await mostrarMensaje(loadingText);
-
-                let dataRespuesta;
-                const cedula = datos.get ? datos.get('cedula') : null;
-
-                if (url === URL_LOGIN) {
-                    if (cedula && cedula.includes('error')) {
-                        dataRespuesta = [{ clave: "loginError", valor: "Cédula o Contraseña incorrecta." }];
-                    } else {
-                        const nombreSimulado = "Juan Pérez López";
-                        dataRespuesta = [
-                            { clave: "loginExitoso", valor: "TableroPropietario" },
-                            { clave: "datosPropietario", valor: nombreSimulado }
-                        ];
-                    }
-                } else if (url === URL_LOGOUT) {
-                    dataRespuesta = [{ clave: "usuarioNoLogueado", valor: "index.html" }];
-                }
-
-                await new Promise(r => setTimeout(r, 800));
-                window.cerrarDialogoMensaje();
-                procesarResultadosSubmit(dataRespuesta);
-            }
+        async function mostrar_error(mensaje) {
+            await mostrarMensaje(mensaje);
         }
 
-        function mostrar_datosPropietario(nombreCompleto) {
-            const ciUsuario = document.getElementById("cedula").value;
-
-            localStorage.setItem('ciUsuarioLogueado', ciUsuario);
-            localStorage.setItem('nombreUsuarioLogueado', nombreCompleto);
-
-            if (!estadoAplicacion.usuario) { estadoAplicacion.usuario = {}; }
-            estadoAplicacion.usuario.nombreCompleto = nombreCompleto;
-            estadoAplicacion.usuario.cedula = ciUsuario;
-
-            // Lógica DRY: Ocultar login y mostrar tablero
-            document.getElementById("login-view").style.display = "none";
-            document.getElementById("dashboard-view").style.display = "block";
-
-            if (typeof cargarDatosTablero === 'function') {
-                cargarDatosTablero(nombreCompleto, ciUsuario);
-            }
-
-            mostrarMensaje("¡Bienvenido, " + nombreCompleto + "!");
+        function mostrar_loginExitoso(urlDestino) {
+            window.location.href = urlDestino;
         }
 
-        function mostrar_loginError(parametro) {
-            mostrarMensaje("Error: " + parametro);
+        async function excepcionDeAplicacion(text) {
+            await mostrarMensaje(text);
         }
-
-        function mostrar_usuarioNoLogueado(nombreVista) {
-            localStorage.removeItem('ciUsuarioLogueado');
-            localStorage.removeItem('nombreUsuarioLogueado');
-            // Lógica DRY: Ocultar tablero y mostrar login
-            document.getElementById("dashboard-view").style.display = "none";
-            document.getElementById("login-view").style.display = "block";
-            window.submitRegistrado = false;
-            mostrarMensaje("Sesión cerrada correctamente.");
-        }
-
-        // --- RESTAURACIÓN DE SESIÓN EN CARGA INICIAL ---
-        window.onload = function () {
-            const ciGuardada = localStorage.getItem('ciUsuarioLogueado');
-            const nombreGuardado = localStorage.getItem('nombreUsuarioLogueado');
-
-            if (ciGuardada) {
-                if (!estadoAplicacion.usuario) { estadoAplicacion.usuario = {}; }
-                estadoAplicacion.usuario.cedula = ciGuardada;
-                estadoAplicacion.usuario.nombreCompleto = nombreGuardado;
-
-                // Restaurar la visibilidad de la vista
-                document.getElementById("login-view").style.display = "none";
-                document.getElementById("dashboard-view").style.display = "block";
-
-                if (typeof cargarDatosTablero === 'function') {
-                    cargarDatosTablero(nombreGuardado, ciGuardada);
-                }
-            } else {
-                document.getElementById("login-view").style.display = "block";
-                document.getElementById("dashboard-view").style.display = "none";
-            }
-        }
-        inicializarSubmit();
     </script>
 </body>
 

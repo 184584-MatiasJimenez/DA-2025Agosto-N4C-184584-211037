@@ -29,7 +29,7 @@ public abstract class Usuario {
     public boolean verificarContrasenia(String contrasenia) {
         System.out.println("[DEBUG] Comparando: stored='" + this.contrasenia + "' input='" + contrasenia + "'");
         System.out.println("[DEBUG] Trim stored='" + this.contrasenia.trim() + "' Trim input='" + contrasenia.trim() + "'");
-        if(contrasenia == null) {
+        if (contrasenia == null || contrasenia.trim().isEmpty()) {
             return false;
         }
         return this.contrasenia.equalsIgnoreCase(contrasenia.trim());
