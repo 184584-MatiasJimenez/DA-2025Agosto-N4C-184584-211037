@@ -262,3 +262,76 @@ body {
 #botonAceptar:hover {
     background-color: var(--color-secondary);
 }
+
+/* Estilos del menú lateral */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 180px;
+    height: 100%;
+    background: #1976d2;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 40px;
+}
+.sidebar button {
+    background: none;
+    border: none;
+    color: #fff;
+    padding: 18px 0;
+    font-size: 15.3px;
+    cursor: pointer;
+    text-align: left;
+    padding-left: 30px;
+    transition: background 0.2s;
+}
+.sidebar button:hover {
+    background: #1565c0;
+}
+.sidebar label {
+    display: block;
+    color: #fff;
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px #1565c0;
+}
+
+/* Estilos del contenedor principal */
+.content {
+    margin-left: 180px; /* Espacio para el sidebar */
+    width: calc(100% - 180px); /* Usar todo el ancho restante */
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos específicos para el iframe */
+.content iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+/* Estilos para el contenido dentro del iframe cuando es gestionContactos.html */
+/* Esto asegura que el contenido use todo el ancho disponible del iframe */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}

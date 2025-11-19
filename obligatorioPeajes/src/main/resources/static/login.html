@@ -147,30 +147,30 @@
     </div>
 
     <script>
-        (function() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const rol = params.get('rol');
+        // (function() {
+        //     try {
+        //         const params = new URLSearchParams(window.location.search);
+        //         const rol = params.get('rol');
 
-                // Si no viene el parámetro 'rol' en la URL, redirigir a index.html
-                if (!rol) {
-                    window.location.href = 'index.html';
-                    return;
-                }
+        //         // Si no viene el parámetro 'rol' en la URL, redirigir a index.html
+        //         // if (!rol) {
+        //         //     window.location.href = 'index.html';
+        //         //     return;
+        //         // }
 
-                // Si existe, colocarlo en el campo oculto y en el texto visible
-                const rolInput = document.getElementById('rol');
-                if (rolInput) rolInput.value = rol;
+        //         // Si existe, colocarlo en el campo oculto y en el texto visible
+        //         const rolInput = document.getElementById('rol');
+        //         if (rolInput) rolInput.value = rol;
 
-                const rolTexto = document.getElementById('rolTexto');
-                if (rolTexto) {
-                    const textoFormateado = rol.charAt(0).toUpperCase() + rol.slice(1).toLowerCase();
-                    rolTexto.textContent = `Ingreso como: ${textoFormateado}`;
-                }
-            } catch (e) {
-                console.warn('No se pudo leer el rol desde la URL:', e);
-            }
-        })();
+        //         const rolTexto = document.getElementById('rolTexto');
+        //         if (rolTexto) {
+        //             const textoFormateado = rol.charAt(0).toUpperCase() + rol.slice(1).toLowerCase();
+        //             rolTexto.textContent = `Ingreso como: ${textoFormateado}`;
+        //         }
+        //     } catch (e) {
+        //         console.warn('No se pudo leer el rol desde la URL:', e);
+        //     }
+        // })();
 
         // --- MANEJO DE SESIÓN ---
         function acceder(event) {

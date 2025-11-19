@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Sistema Peaje - Principal</title>
+	<link rel="stylesheet" href="css/estilos.css">
+	<script src='vistaWeb.js'></script>
+	<script src='sse.js'></script>
+</head>
+
+<body>
+	<script src="utilesVista.js"></script>
+
+	<div class="sidebar">
+		<label id="nombreCompleto"> </label>
+		<button onclick="cargarContenido('emularTransito.html')">Emulador tránsito</button>
+		<button onclick="logoutAdministrador()">Salir</button>
+	</div>
+	<div class="content">
+		<iframe id="contenidoFrame" src="emularTransito.html" frameborder="0"></iframe>
+	</div>
+	<script>
+		urlIniciarVista = "/menuAdministrador/vistaConectada";
+		urlCierreVista = "/accesoAdministrador/logout";
+		urlRegistroSSE = "/menuAdministrador/registrarSSE"; // Al cargarse el menu admin se registra el SSE
+		const spnNombreCompleto = document.getElementById("nombreCompleto");
+
+		function cargarContenido(pagina) {
+			document.getElementById('contenidoFrame').src = pagina;
+		}
+
+		function logoutAdministrador() {
+			submit(urlCierreVista, null);
+		}
+
+		function mostrar_Logout_exitoso(urlDestino) {
+			mostrarMensaje("Ha cerrado sesión correctamente.").then(() => {
+				window.location.href = urlDestino;
+			});
+		}
+
+		function mostrar_usuarioNoAutenticado(urlDestino) {
+			window.location.href = urlDestino;
+		}
+
+		function mostrar_nombreCompleto(nombreCompleto) {
+			spnNombreCompleto.innerHTML = "Administrador: " + nombreCompleto.toUpperCase();
+		}
+
+		//Procesa los mensajes recibidos por SSE
+		function procesarMensajeSSE(mensaje) {
+			var iframe = document.getElementById('contenidoFrame');
+			var iframeWindow = iframe.contentWindow;
+			iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
+		}
+
+		//Se ejecuta cuando se cierra la conexion desde el servidor
+		//Si no se define esta funcion, por defecto se "borra" la pagina 
+		function conexionSSECerrada(event) {
+			cerrar();
+		}
+		async function cerrar() {
+			let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
+			if (respuesta) {
+				location.reload();
+			} else {
+				document.body.innerHTML = '';
+			}
+		}
+
+	</script>
+</body>
+
+</html>
