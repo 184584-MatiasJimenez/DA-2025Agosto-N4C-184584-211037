@@ -1,162 +1,63 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero Control</title>
+    <!-- Enlace al CSS externo -->
     <link rel="stylesheet" href="css/estilos.css">
-    <script src='vistaWeb.js'></script>
-    <script src='sse.js'></script>
+    <!-- Scripts -->
+    <script src="vistaWeb.js"></script>
+    <script src="sse.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Estilos esenciales y para el modal */
-        :root {
-            --color-primary: #007bff;
-            --color-secondary: #0056b3;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f7f9;
-        }
-
-        #main-app-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        #login-view {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        .btn-ingresar {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-
-        .btn-ingresar:hover {
-            background-color: var(--color-secondary);
-        }
-
-        /* Modal Styles */
-        #mensajeDlg {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #mensajeDlg .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        #botonAceptar {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        #botonAceptar:hover {
-            background-color: var(--color-secondary);
-        }
-    </style>
 </head>
-
 <body>
     <script src="utilesVista.js"></script>
+
     <div id="main-app-container">
         <div id="dashboard-view" style="display:block;" class="p-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-4 mb-6">
-                <h1 class="text-3xl font-extrabold text-gray-800 mb-4 md:mb-0">Tablero de Control del Propietario</h1>
-                <button onclick="logoutPropietario();"
-                    class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
+            <div class="header-dashboard">
+                <h1 class="text-3xl font-extrabold text-gray-800 mb-4 md:mb-0">
+                    Tablero de Control del Propietario
+                </h1>
+                <button onclick="logoutPropietario();" class="btn-logout">
                     Cerrar Sesión
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-blue-100 p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
-                    <h2 class="text-lg font-semibold text-gray-600">Propietario</h2>
-                    <div id="nombre-completo-value" class="text-3xl font-bold text-gray-900 mt-1"><label
-                            id="nombreCompleto"> </label></div>
+            <!-- Tarjetas -->
+            <div class="data-cards">
+                <div class="card card-blue">
+                    <h2>Propietario</h2>
+                    <div id="nombre-completo-value" class="value">
+                        <label id="nombreCompleto"></label>
+                    </div>
                 </div>
-                <div class="bg-green-100 p-6 rounded-xl shadow-lg border-l-4 border-green-500">
-                    <h2 class="text-lg font-semibold text-gray-600">Estado de la Cuenta</h2>
-                    <div id="estado-value" class="text-3xl font-bold text-green-600 mt-1">Activo</div>
+                <div class="card card-green">
+                    <h2>Estado de la Cuenta</h2>
+                    <div id="estado-value" class="value">Activo</div>
                 </div>
-                <div class="bg-yellow-100 p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
-                    <h2 class="text-lg font-semibold text-gray-600">Saldo Disponible</h2>
-                    <div id="saldo-value" class="text-3xl font-bold text-yellow-600 mt-1">$ 0.00</div>
+                <div class="card card-yellow">
+                    <h2>Saldo Disponible</h2>
+                    <div id="saldo-value" class="value">$ 0.00</div>
                 </div>
             </div>
 
-            <h2 class="text-2xl font-semibold mt-8 mb-4 border-l-4 border-primary pl-3 text-gray-800">Vehículos
-                Registrados
-            </h2>
-            <div class="overflow-x-auto bg-white rounded-lg shadow-md mb-8">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-100 text-gray-600">
+            <!-- Tabla -->
+            <h2>Vehículos Registrados</h2>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Matrícula</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Modelo</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Color</th>
+                            <th>Matrícula</th>
+                            <th>Modelo</th>
+                            <th>Color</th>
+                            <th>Tránsitos</th> <th>Monto Total</th>
                         </tr>
                     </thead>
-                    <tbody id="vehiculos-body" class="bg-white divide-y divide-gray-200">
-                        <tr class="text-gray-500">
-                            <td colspan="3" class="px-6 py-4 text-center">Cargando vehículos...</td>
+                    <tbody id="vehiculos-body">
+                        <tr>
+                            <td colspan="3" class="text-center">Cargando vehículos...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -164,7 +65,7 @@
         </div>
     </div>
 
-    <!-- Modal de Mensajes (reemplaza a alert/confirm) -->
+    <!-- Modal -->
     <div id="mensajeDlg">
         <div class="modal-content">
             <h3 class="text-xl font-semibold text-primary">Mensaje del Sistema</h3>
@@ -172,6 +73,8 @@
             <button id="botonAceptar">Aceptar</button>
         </div>
     </div>
+</body>
+</html>
     <script>
         urlIniciarVista = "/menuTablero/vistaConectada";
         urlCierreVista = "/acceso/logout";
@@ -216,7 +119,29 @@
                 document.body.innerHTML = '';
             }
         }
-    </script>
-    <!-- <script src="tableroPropietario.js"></script> -->
 
-</body>
+        function cargarVehiculos() {
+            submit("/menuTablero/vehiculosPropietario", null, 'GET');
+        }
+
+        const configuracionColumnasVehiculos = [
+            { campo: 'matricula' },
+            { campo: 'modelo', compuesto: ['marca', 'modelo'], separador: ' ' },
+            { campo: 'color' },
+            { campo: 'cantidadTransitos' },
+            { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
+        ];
+        
+        function mostrar_listaVehiculos(vehiculos){
+            const tbody = document.getElementById('vehiculos-body');
+            tbody.innerHTML = crearFilasTablaDesdeJson({
+                data : vehiculos,
+                columnas: configuracionColumnasVehiculos
+            });
+        }
+        function primerSubmitFinalizado() {
+            cargarVehiculos();
+        }
+        
+    </script>
+

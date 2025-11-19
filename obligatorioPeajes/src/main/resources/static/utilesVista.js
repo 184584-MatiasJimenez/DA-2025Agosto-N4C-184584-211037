@@ -262,7 +262,36 @@ function formatearEncabezado(campo) {
     .replace(/([a-z0-9])([A-Z])/g, '$1 $2')  // inserta espacio entre minúscula/número y mayúscula
     .replace(/^./, str => str.toUpperCase()); // pone mayúscula inicial
 }
+//para crear las filas de la tabla
+function crearFilasTablaDesdeJson(config) {
+    let html = '';
+    const data = config.data;
+    const columnas = config.columnas;
 
+    if (!data || data.length === 0) {
+        return `<tr><td colspan="${columnas.length}" class="text-center">No hay vehículos registrados.</td></tr>`;
+    }
+
+    data.forEach(item => {
+        html += '<tr>';
+        columnas.forEach(col => {
+            let valor = item[col.campo];
+
+            if (col.formateador) {
+                valor = col.formateador(valor);
+            }
+            
+            if (col.compuesto) {
+                valor = col.compuesto.map(campo => item[campo]).join(col.separador || ' ');
+            }
+
+            html += `<td>${valor || ''}</td>`;
+        });
+        html += '</tr>';
+    });
+
+    return html;
+}
 
 /*
  * ********************** SELECT HTML*************************************

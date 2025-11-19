@@ -53,7 +53,7 @@ public class Fachada extends Observable {
 	}
 
 	public java.util.List<Vehiculo> obtenerVehiculosPropietario(String cedula) {
-		return null;
+		return this.servicioUsuario.obtenerVehiculosPropietario(cedula);
 	}
 
 	public java.util.List<Transito> obtenerHistorialTransitos(String cedula) {
@@ -89,7 +89,6 @@ public class Fachada extends Observable {
 	}
 
 	public void asignarBonificacion(String ciPropietario, String nombreBonif, String nombrePuesto) {
-
 	}
 
 	public Transito emularTransito(String matricula, String nombrePuesto, DateTime fechaHora) {

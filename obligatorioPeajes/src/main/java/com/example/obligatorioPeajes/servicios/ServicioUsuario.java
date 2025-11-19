@@ -142,4 +142,12 @@ public class ServicioUsuario {
             propietario.agregarVehiculo(nuevoVehiculo);
         }
     }
+    
+    public java.util.List<Vehiculo> obtenerVehiculosPropietario(String ci) {
+    Propietario propietario = this.buscarPropietarioPorCI(ci);
+    if (propietario != null) {
+        return new ArrayList<>(propietario.getVehiculos());
+    }
+    return new ArrayList<>();
+}
 }

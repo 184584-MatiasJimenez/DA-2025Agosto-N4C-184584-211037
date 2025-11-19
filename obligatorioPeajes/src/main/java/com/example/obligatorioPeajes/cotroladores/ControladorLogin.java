@@ -50,4 +50,6 @@ public class ControladorLogin {
         return Respuesta.lista(new Respuesta("loginExitoso", "PanelAdmin"), datosAdmin);
     }
 
+    
+
 }
