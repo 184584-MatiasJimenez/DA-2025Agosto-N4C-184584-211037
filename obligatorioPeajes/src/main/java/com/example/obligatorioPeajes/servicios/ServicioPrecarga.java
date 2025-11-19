@@ -91,19 +91,44 @@ public class ServicioPrecarga {
         sistemaUsuario.agregarVehiculo(propB, "DEF456", "Honda", "Civic", "Azul", 2019, categoriaAuto);
         sistemaUsuario.agregarVehiculo(propC, "GHI789", "Ford", "Focus", "Negro", 2021, categoriaAuto);
         
-        sistemaUsuario.agregarVehiculo(propD, "MOTO1", "Yamaha", "YZF-R3", "Blanco", 2021, categoriaMoto);
-        
-        sistemaUsuario.agregarVehiculo(propC, "CAMIONETA1", "Chevrolet", "Trax", "Gris", 2022, catCamioneta);
-        sistemaUsuario.agregarVehiculo(propA, "CAMIONETA2", "Jeep", "Renegade", "Blanco", 2018, catCamioneta);
+        sistemaUsuario.agregarVehiculo(propD, "TLN342", "Yamaha", "YZF-R3", "Blanco", 2021, categoriaMoto);
+        sistemaUsuario.agregarVehiculo(propD, "QWE567", "Japan", "PRX250", "Negro", 2021, categoriaMoto);
 
-		sistemaTransito.registrarTransito("ABC123", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 8, 30)));
-        sistemaTransito.registrarTransito("DEF456", "Puesto Norte", new DateTime(LocalDateTime.of(2024, 6, 1, 9, 15)));
-        sistemaTransito.registrarTransito("GHI789", "Puesto Sur", new DateTime(LocalDateTime.of(2024, 6, 1, 10, 0)));
-        sistemaTransito.registrarTransito("MOTO1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 11, 45)));
-        sistemaTransito.registrarTransito("MOTO2", "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 12, 30)));
-        sistemaTransito.registrarTransito("CAMIONETA1", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 13, 15)));
-        sistemaTransito.registrarTransito("CAMIONETA2", "Puesto Este", new DateTime(LocalDateTime.of(2024, 6, 1, 14, 0)));
-		
+        
+        sistemaUsuario.agregarVehiculo(propC, "BFG123", "Chevrolet", "Trax", "Gris", 2022, catCamioneta);
+        sistemaUsuario.agregarVehiculo(propA, "BFG456", "Jeep", "Cherokee", "Blanco", 2018, catCamioneta);
+
+		Vehiculo v1 = sistemaUsuario.buscarVehiculoPorMatricula("ABC123");
+		if (v1 != null) {
+			sistemaTransito.registrarTransito(v1, "Puesto Central", new DateTime(LocalDateTime.of(2024, 6, 1, 8, 30)));
+			sistemaTransito.registrarTransito(v1, "Puesto Central", new DateTime(LocalDateTime.of(2025, 10, 1, 8, 30)));
+			
+		}
+		Vehiculo v2= sistemaUsuario.buscarVehiculoPorMatricula("DEF456");
+		if(v2 != null) {
+        sistemaTransito.registrarTransito(v2, "Puesto Norte", new DateTime(LocalDateTime.of(2025, 6, 1, 9, 15)));	
+		}
+		Vehiculo v3 = sistemaUsuario.buscarVehiculoPorMatricula("GHI789");
+		if (v3 != null) {
+			sistemaTransito.registrarTransito(v3, "Puesto Sur", new DateTime(LocalDateTime.of(2024, 9, 1, 10, 0)));
+		}
+		Vehiculo v4 = sistemaUsuario.buscarVehiculoPorMatricula("TLN342");
+		if (v4 != null) {
+			sistemaTransito.registrarTransito(v4, "Puesto Este", new DateTime(LocalDateTime.of(2025, 6, 1, 11, 45)));
+		}
+		Vehiculo v5 = sistemaUsuario.buscarVehiculoPorMatricula("QWE567");
+		if (v5 != null) {
+			sistemaTransito.registrarTransito(v5, "Puesto Central", new DateTime(LocalDateTime.of(2025, 7, 1, 12, 30)));
+		}
+		Vehiculo v6 = sistemaUsuario.buscarVehiculoPorMatricula("BFG123");
+		if (v6 != null) {
+			sistemaTransito.registrarTransito(v6, "Puesto Este", new DateTime(LocalDateTime.of(2025, 11, 1, 13, 15)));
+		}
+		Vehiculo v7 = sistemaUsuario.buscarVehiculoPorMatricula("BFG456");
+		if (v7 != null) {
+			sistemaTransito.registrarTransito(v7, "Puesto Este", new DateTime(LocalDateTime.of(2024, 12, 1, 14, 0)));
+		}
+
 		//buscar bonificaciones
         Bonificacion bonifExonerado = sistemaBonificacion.buscarBonificacionPorNombre("Exonerado");
         Bonificacion bonifFrecuente = sistemaBonificacion.buscarBonificacionPorNombre("Frecuente");
@@ -112,15 +137,6 @@ public class ServicioPrecarga {
         sistemaBonificacion.asignarBonificacion(propE, puesto4, bonifExonerado);
         sistemaBonificacion.asignarBonificacion(propA, puesto1, bonifFrecuente);
         sistemaBonificacion.asignarBonificacion(propB, puesto2, bonifTrabajador);
-    
-		// Agregar vehiculos
-		categoriaAuto = sistemaTransito.buscarCategoriaPorNombre("Automóvil");
-		sistemaUsuario.agregarVehiculo(propA, "ABC123", "Toyota", "Corolla", "Rojo", 2020, categoriaAuto);
-		sistemaUsuario.agregarVehiculo(propB, "DEF456", "Honda", "Civic", "Azul", 2019, categoriaAuto);
-		sistemaUsuario.agregarVehiculo(propC, "GHI789", "Ford", "Focus", "Negro", 2021, categoriaAuto);
-
-		categoriaMoto = sistemaTransito.buscarCategoriaPorNombre("Moto");
-		sistemaUsuario.agregarVehiculo(propD, "MOTO1", "Yamaha", "YZF-R3", "Blanco", 2021, categoriaMoto);
-    }
+        }
 
 }

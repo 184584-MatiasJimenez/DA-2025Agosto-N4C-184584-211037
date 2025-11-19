@@ -109,4 +109,13 @@ public class Propietario extends Usuario {
 		return this.estado.esDeshabilitado();
 	}
 
+	public Vehiculo buscarVehiculoPorMatricula(String matricula){
+		for(Vehiculo vehiculo : this.vehiculos){
+			if(vehiculo.getMatricula().equalsIgnoreCase(matricula)){
+				return vehiculo;
+			}
+		}
+		return null;
+	}
+
 }

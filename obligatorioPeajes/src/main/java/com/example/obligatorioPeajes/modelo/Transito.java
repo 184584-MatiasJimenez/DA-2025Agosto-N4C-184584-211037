@@ -20,6 +20,18 @@ public class Transito {
 
     private String nombreBonificacionAplicada;
 
+    public Transito(DateTime fechaHora, Vehiculo vehiculo, PuestoDePeaje puesto, double tarifaBase) {
+        this.fechaHora = fechaHora;
+        this.vehiculo = vehiculo;
+        this.puesto = puesto;
+        this.tarifaBase = tarifaBase;
+        this.propietario = vehiculo.getPropietario();
+        this.descuentoAplicado = 0.0;
+        this.montoBonificacion = 0.0;
+        this.montoPagado = tarifaBase;
+        this.nombreBonificacionAplicada = null;
+    }
+
     public double getTarifaBase() {
         return tarifaBase;
     }

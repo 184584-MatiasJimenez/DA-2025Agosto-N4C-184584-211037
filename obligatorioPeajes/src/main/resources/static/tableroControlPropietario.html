@@ -52,8 +52,7 @@
                             <th>Matrícula</th>
                             <th>Modelo</th>
                             <th>Color</th>
-                            <th>Tránsitos</th> <th>Monto Total</th>
-                        </tr>
+                            <th>Tránsitos</th> <th>Monto Total</th> </tr>
                     </thead>
                     <tbody id="vehiculos-body">
                         <tr>
@@ -126,7 +125,7 @@
 
         const configuracionColumnasVehiculos = [
             { campo: 'matricula' },
-            { campo: 'modelo', compuesto: ['marca', 'modelo'], separador: ' ' },
+            { campo: 'modelo'},
             { campo: 'color' },
             { campo: 'cantidadTransitos' },
             { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
