@@ -9,6 +9,11 @@ var urlCierreVista = null;
 var parametrosCierreVista = "";
 var isPrimerSubmitFinalizado = false;
 var prefijoNombreFuncionProcesoResultado = "mostrar_";
+// Por compatibilidad, desactivar logout automático en beforeunload para evitar
+// invalidar la sesión cuando el usuario recarga la página. Si se desea
+// habilitar, establecer `window.__autoLogoutOnBeforeUnload = true` antes
+// de que se ejecute el DOMContentLoaded.
+window.__autoLogoutOnBeforeUnload = false;
 
 // Se ejecuta al final de la carga de la pÃ¡gina para avisar al controlador que la vista esta cargada
 document.addEventListener("DOMContentLoaded", function () {
@@ -16,10 +21,17 @@ document.addEventListener("DOMContentLoaded", function () {
         submit(urlIniciarVista, parametrosInicioVista, 'GET');
     }
 
-    //Cuando se baja la pagina le avisa al controlador que la vista no estÃ¡ activa
-    if (urlCierreVista !== null) {
+    // Cuando se baja la pagina le avisa al controlador que la vista no está activa
+    // Por defecto NO enviamos logout en beforeunload porque provoca que al
+    // refrescar la página el servidor invalide la sesión. Para habilitar este
+    // comportamiento (no recomendado) setear `window.__autoLogoutOnBeforeUnload = true`
+    if (urlCierreVista !== null && window.__autoLogoutOnBeforeUnload === true) {
         window.addEventListener("beforeunload", function () {
-            navigator.sendBeacon(urlCierreVista, parametrosCierreVista);
+            try {
+                navigator.sendBeacon(urlCierreVista, parametrosCierreVista);
+            } catch (e) {
+                console.warn('sendBeacon falló:', e);
+            }
         });
     }
     //Quitar este metodo, ya no es necesario...revisar antes 
@@ -34,18 +46,20 @@ function submit(endPointUrl, urlEncodedData, method = 'POST') {
     let fetchUrl = endPointUrl;
     let fetchOptions = {
         method: method,
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+        // Asegurar envío de cookies para la sesión en peticiones same-origin
+        credentials: 'same-origin'
     };
 
     if (method.toUpperCase() === 'GET') {
         if (urlEncodedData && urlEncodedData.length > 0) {
             fetchUrl += (fetchUrl.includes('?') ? '&' : '?') + urlEncodedData;
         }
-        // GET no debe tener body
-        delete fetchOptions.headers; // No es necesario el Content-Type en GET
+        // GET no debe tener body ni Content-Type
     } else {
+        // En solicitudes que no son GET, indicar el Content-Type
+        fetchOptions.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
         fetchOptions.body = urlEncodedData;
     }
 
