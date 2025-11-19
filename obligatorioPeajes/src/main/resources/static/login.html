@@ -118,6 +118,7 @@
     <div id="main-app-container">
         <div id="login-view">
             <h2>Ingreso a la Aplicación</h2>
+            <p id="rolTexto" style="margin-top:8px;color:#333;font-weight:600;"></p>
             <form id="loginForm" onsubmit="acceder(event);">
                 <div class="form-group">
                     <label for="cedula">Cédula:</label>
@@ -127,6 +128,7 @@
                     <label for="contrasenia">Contraseña:</label>
                     <input type="password" id="contrasenia" name="contrasenia" required>
                 </div>
+                <input type="hidden" id="rol" name="rol" value="propietario">
                 <button type="submit" class="btn-ingresar">Ingresar</button>
             </form>
         </div>
@@ -145,18 +147,48 @@
     </div>
 
     <script>
+        (function() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const rol = params.get('rol');
+
+                // Si no viene el parámetro 'rol' en la URL, redirigir a index.html
+                if (!rol) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                // Si existe, colocarlo en el campo oculto y en el texto visible
+                const rolInput = document.getElementById('rol');
+                if (rolInput) rolInput.value = rol;
+
+                const rolTexto = document.getElementById('rolTexto');
+                if (rolTexto) {
+                    const textoFormateado = rol.charAt(0).toUpperCase() + rol.slice(1).toLowerCase();
+                    rolTexto.textContent = `Ingreso como: ${textoFormateado}`;
+                }
+            } catch (e) {
+                console.warn('No se pudo leer el rol desde la URL:', e);
+            }
+        })();
+
         // --- MANEJO DE SESIÓN ---
         function acceder(event) {
             event.preventDefault();
-            submit("acceso/ingresoPropietario", serializarFormulario("loginForm"));
+            const rol = document.getElementById('rol').value;
+            submit(`acceso${rol.charAt(0).toUpperCase() + rol.slice(1).toLowerCase()}/login`, serializarFormulario("loginForm"));
         }
 
         async function mostrar_error(mensaje) {
             await mostrarMensaje(mensaje);
         }
 
-        function mostrar_loginExitoso(urlDestino) {
+        function mostrar_Login_exitoso(urlDestino) {
             window.location.href = urlDestino;
+        }
+
+        async function mostrar_Credenciales_incorrectas() {
+            await mostrarMensaje("Cédula o contraseña incorrectas. Por favor, intente nuevamente.");
         }
 
         async function excepcionDeAplicacion(text) {

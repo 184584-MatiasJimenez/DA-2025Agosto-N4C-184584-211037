@@ -77,7 +77,7 @@
 </html>
     <script>
         urlIniciarVista = "/menuTablero/vistaConectada";
-        urlCierreVista = "/acceso/logout";
+        urlCierreVista = "/accesoPropietario/logout";
         urlRegistroSSE = "/menuTablero/registrarSSE"; // Al cargarse el menu tablero se registra el SSE
         const spnNombreCompleto = document.getElementById("nombreCompleto");
         console.log("Iniciando Tablero Control Propietario", spnNombreCompleto);
@@ -87,7 +87,13 @@
         }
 
         function logoutPropietario() {
-            submit("/acceso/logout", null);
+            submit(urlCierreVista, null);
+        }
+
+        function mostrar_Logout_exitoso(urlDestino) {
+            mostrarMensaje("Ha cerrado sesión correctamente.").then(() => {
+                window.location.href = urlDestino;
+            });
         }
 
         function mostrar_usuarioNoAutenticado(urlDestino) {

@@ -62,34 +62,41 @@ public class ServicioUsuario {
         return null;
 	}
 
-    public Sesion loginPropietario(String cedula, String contrasenia) throws UsuarioException{
+    private Usuario login(String cedula, String contrasenia) throws UsuarioException {
         Usuario usuario = this.validarCredenciales(cedula, contrasenia);
         if(usuario == null) {
             throw new UsuarioException("Acceso denegado");
         }
+        this.usuarioLogueado = usuario;
+        return usuario;
+    }
+
+    public Propietario loginPropietario(String cedula, String contrasenia) throws UsuarioException{
+        Usuario usuario = login(cedula, contrasenia);
         if(!(usuario instanceof Propietario propietario)) {
             throw new UsuarioException("El usuario no es un propietario");
         }
-        if(propietario.estaDeshabilitado()) {
-            throw new UsuarioException("Usuario deshabilitado, no puede ingresar al sistema");
-        }
-        Sesion sesion = new Sesion(propietario);
-        this.sesiones.add(sesion);
-        Fachada.getInstance().avisar(Fachada.Eventos.nuevoUsuarioConectado);
-        this.usuarioLogueado = propietario;
-        return sesion;
+		return propietario;
     }
     public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException{
-        Usuario usuario = this.validarCredenciales(cedula, contrasenia);
-
-        if(usuario == null) {
-            throw new UsuarioException("Acceso denegado");
-        }
+        Usuario usuario = login(cedula, contrasenia);
         if(!(usuario instanceof Administrador administrador)) {
             throw new UsuarioException("El usuario no es un administrador");
-        }
-        this.usuarioLogueado = administrador;
+        }        
         return administrador;
+    }
+
+    public Sesion loginSesion(String cedula, String contrasenia, String rol) throws UsuarioException {
+        Sesion nuevaSesion = null;
+        Usuario usuario = rol.equals("PROPIETARIO") ? loginPropietario(cedula, contrasenia) : loginAdministrador(cedula, contrasenia);
+        if (usuario != null) {
+            nuevaSesion = new Sesion(usuario);
+            sesiones.add(nuevaSesion);
+            Fachada.getInstance().avisar(Fachada.Eventos.nuevoUsuarioConectado);
+        } else {
+            throw new UsuarioException("Credenciales incorrectas");
+        }
+        return nuevaSesion;
     }
 
 	public void logout(Sesion s) {

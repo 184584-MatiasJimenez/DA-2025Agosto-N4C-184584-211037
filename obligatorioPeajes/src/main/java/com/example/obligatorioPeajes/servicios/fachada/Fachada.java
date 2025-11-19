@@ -9,7 +9,7 @@ import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
 
 public class Fachada extends Observable {
-	public enum Eventos{
+	public enum Eventos {
 		nuevoUsuarioConectado,
 		nuevoUsuarioDesconectado
 	}
@@ -32,8 +32,16 @@ public class Fachada extends Observable {
 		return instancia;
 	}
 
-	public Sesion login(String cedula, String contrasenia) throws UsuarioException {
-		return this.servicioUsuario.loginPropietario(cedula, contrasenia);
+	public Sesion login(String cedula, String contrasenia, String rol) throws UsuarioException {
+		return servicioUsuario.loginSesion(cedula, contrasenia, rol);
+	}
+
+	public Propietario loginPropietario(String cedula, String contrasenia) throws UsuarioException {
+		return servicioUsuario.loginPropietario(cedula, contrasenia);
+	}
+
+	public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
+		return servicioUsuario.loginAdministrador(cedula, contrasenia);
 	}
 
 	public void precargaDatosIniciales() {
@@ -42,8 +50,9 @@ public class Fachada extends Observable {
 	}
 
 	public void logout(Sesion s) {
-        this.servicioUsuario.logout(s);
+		this.servicioUsuario.logout(s);
 	}
+
 	public Propietario obtenerDatosPropietario(String cedula) {
 		return null;
 	}
@@ -93,9 +102,6 @@ public class Fachada extends Observable {
 
 	public Transito emularTransito(String matricula, String nombrePuesto, DateTime fechaHora) {
 		return null;
-	}
-	public Administrador loginAdministrador(String cedula, String contrasenia) throws UsuarioException {
-		return this.servicioUsuario.loginAdministrador(cedula, contrasenia);
 	}
 
 }

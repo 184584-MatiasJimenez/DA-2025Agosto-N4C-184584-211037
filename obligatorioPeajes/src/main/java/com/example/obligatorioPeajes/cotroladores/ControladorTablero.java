@@ -20,8 +20,6 @@ import com.example.obligatorioPeajes.utils.Respuesta;
 import com.example.obligatorioPeajes.utils.ConexionNavegador;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 @RestController
 @RequestMapping("/menuTablero")
 @Scope("session")
@@ -42,32 +40,34 @@ public class ControladorTablero {
     }
 
     @GetMapping("/vistaConectada")
-    public List<Respuesta> inicializarVista(@SessionAttribute(name = "sesion", required = false) Sesion sesion) {
-        if (sesion == null) {
+    public List<Respuesta> inicializarVista(
+            @SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
+        if (propietario == null) {
             // Manejar el caso en que el usuario no está en la sesión pide redireccionar a
             // la página de login
-            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
         }
-        return Respuesta.lista(new Respuesta("nombreCompleto", sesion.getUsuario().getNombreCompleto()));
+        return Respuesta.lista(new Respuesta("nombreCompleto", propietario.getUsuario().getNombreCompleto()));
 
     }
-    
+
     @GetMapping("/vehiculosPropietario")
-    public List<Respuesta> obtenerVehiculos(@SessionAttribute(name = "sesion", required = false) Sesion sesion) {
-        if(sesion == null){
-            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+    public List<Respuesta> obtenerVehiculos(
+            @SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
+        if (propietario == null) {
+            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
         }
 
-        if(!(sesion.getUsuario() instanceof Propietario propietario)){
-            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+        if (!(propietario.getUsuario() instanceof Propietario)) {
+            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
         }
 
-        List<Vehiculo> vehiculos = fachada.obtenerVehiculosPropietario(propietario.getCedula());
+        List<Vehiculo> vehiculos = fachada.obtenerVehiculosPropietario(propietario.getUsuario().getCedula());
         List<VehiculoDTO> vehiculosDto = new ArrayList<>();
-        for(Vehiculo vehiculo: vehiculos){
+        for (Vehiculo vehiculo : vehiculos) {
             vehiculosDto.add(new VehiculoDTO(vehiculo));
         }
         return Respuesta.lista(
-            new Respuesta("listaVehiculos", vehiculosDto));
+                new Respuesta("listaVehiculos", vehiculosDto));
     }
 }
