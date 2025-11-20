@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero Control</title>
     <!-- Enlace al CSS externo -->
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/modal.css">
     <!-- Scripts -->
     <script src="vistaWeb.js"></script>
     <script src="sse.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <script src="utilesVista.js"></script>
 
@@ -112,89 +115,70 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="mensajeDlg">
-        <div class="modal-content">
-            <h3 class="text-xl font-semibold text-primary">Mensaje del Sistema</h3>
-            <p id="textoMensaje" class="my-4"></p>
-            <button id="botonAceptar">Aceptar</button>
-        </div>
-    </div>
+            <!-- Modal -->
+            <div id="mensajeDlg">
+                <div class="modal-content">
+                    <h3 class="text-xl font-semibold text-primary">Mensaje del Sistema</h3>
+                    <p id="textoMensaje" class="my-4"></p>
+                    <button id="botonAceptar">Aceptar</button>
+                </div>
+            </div>
 
-    <script>
-        urlIniciarVista = "/menuTablero/vistaConectada";
-        urlCierreVista = "/accesoPropietario/logout";
-        urlRegistroSSE = "/menuTablero/registrarSSE"; // Al cargarse el menu tablero se registra el SSE
-        const spnNombreCompleto = document.getElementById("nombreCompleto");
-        console.log("Iniciando Tablero Control Propietario", spnNombreCompleto);
+            <script>
+                urlIniciarVista = "/menuTablero/vistaConectada";
+                urlCierreVista = "/accesoPropietario/logout";
+                urlRegistroSSE = "/menuTablero/registrarSSE"; // Al cargarse el menu tablero se registra el SSE
+                const spnNombreCompleto = document.getElementById("nombreCompleto");
+                console.log("Iniciando Tablero Control Propietario", spnNombreCompleto);
 
-        function cargarContenido(pagina) {
-            document.getElementById('contenidoFrame').src = pagina;
-        }
+                function cargarContenido(pagina) {
+                    document.getElementById('contenidoFrame').src = pagina;
+                }
 
-        function logoutPropietario() {
-            submit(urlCierreVista, null);
-        }
+                function logoutPropietario() {
+                    submit(urlCierreVista, null);
+                }
 
-        function mostrar_Logout_exitoso(urlDestino) {
-            mostrarMensaje("Ha cerrado sesión correctamente.").then(() => {
-                window.location.href = urlDestino;
-            });
-        }
+                function mostrar_Logout_exitoso(urlDestino) {
+                    mostrarMensaje("Ha cerrado sesión correctamente.").then(() => {
+                        window.location.href = urlDestino;
+                    });
+                }
 
-        function mostrar_usuarioNoAutenticado(urlDestino) {
-            window.location.href = urlDestino;
-        }
+                function mostrar_usuarioNoAutenticado(urlDestino) {
+                    window.location.href = urlDestino;
+                }
 
-        function mostrar_nombreCompleto(nombreCompleto) {
-            spnNombreCompleto.innerHTML = "TABLERO DE " + nombreCompleto.toUpperCase();
-        }
+                function mostrar_nombreCompleto(nombreCompleto) {
+                    spnNombreCompleto.innerHTML = "TABLERO DE " + nombreCompleto.toUpperCase();
+                }
 
-        //Procesa los mensajes recibidos por SSE
-        function procesarMensajeSSE(mensaje) {
+                //Procesa los mensajes recibidos por SSE
+                function procesarMensajeSSE(mensaje) {
 
-            var iframe = document.getElementById('contenidoFrame');
-            var iframeWindow = iframe.contentWindow;
-            iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
-        }
+                    var iframe = document.getElementById('contenidoFrame');
+                    var iframeWindow = iframe.contentWindow;
+                    iframeWindow.procesarResultadosSubmit(mensaje); //asumo que el iFrame tiene vistaWeb.js incluida
+                }
 
-        //Se ejecuta cuando se cierra la conexion desde el servidor
-        //Si no se define esta funcion, por defecto se "borra" la pagina 
-        function conexionSSECerrada(event) {
-            cerrar();
-        }
-        async function cerrar() {
-            let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
-            if (respuesta) {
-                location.reload();
-            } else {
-                document.body.innerHTML = '';
-            }
-        }
-        
-        //cargar vehiculos
-        function cargarVehiculos() {
-            submit("/menuTablero/vehiculosPropietario", null, 'GET');
-        }
+                //Se ejecuta cuando se cierra la conexion desde el servidor
+                //Si no se define esta funcion, por defecto se "borra" la pagina 
+                function conexionSSECerrada(event) {
+                    cerrar();
+                }
+                async function cerrar() {
+                    let respuesta = await mostrarConfirmacion("Se ha cerrado la aplicacion en esta ventana", "Intenar volver a abrirla", "Cerrar");
+                    if (respuesta) {
+                        location.reload();
+                    } else {
+                        document.body.innerHTML = '';
+                    }
+                }
 
-        const configuracionColumnasVehiculos = [
-            { campo: 'matricula' },
-            { campo: 'modelo'},
-            { campo: 'color' },
-            { campo: 'cantidadTransitos' },
-            { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
-        ];
-        
-        function mostrar_listaVehiculos(vehiculos){
-            const tbody = document.getElementById('vehiculos-body');
-            tbody.innerHTML = crearFilasTablaDesdeJson({
-                data : vehiculos,
-                columnas: configuracionColumnasVehiculos
-            });
-        }
-        function primerSubmitFinalizado() {
-            cargarVehiculos();
-        }
+                //cargar vehiculos
+                function cargarVehiculos() {
+                    submit("/menuTablero/vehiculosPropietario", null, 'GET');
+                }
 
         //Cargar bonificaciones
         const configuracionColumnasBonificaciones = [
@@ -257,9 +241,9 @@
         }
 
 
-        
-    </script>
+
+            </script>
 
 </body>
-</html>
 
+</html>

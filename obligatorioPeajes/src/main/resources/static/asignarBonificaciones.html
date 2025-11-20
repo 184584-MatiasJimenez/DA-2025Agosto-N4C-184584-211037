@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asignar bonificaciones</title>
+    <link rel="stylesheet" href="css/bonificaciones.css">
+    <script src='vistaWeb.js'></script>
+    <script src='sse.js'></script>
+</head>
+
+<body>
+    <script src="utilesVista.js"></script>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon"></div>
+            <h1>Asignar bonificaciones</h1>
+        </div>
+
+        <div class="main-content">
+            <!-- Sección izquierda -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="bonificacion">Bonificaciones definidas</label>
+                    <select id="bonificacion" name="bonificacion">
+                        <option value="residente-costa-oro" selected>Residente Costa de Oro</option>
+                        <option value="otra-bonificacion">Otra bonificación</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="puesto">Puestos definidos</label>
+                    <select id="puesto" name="puesto">
+                        <option value="204" selected>Puesto 204 - Ruta Interbalnearia</option>
+                        <option value="201">Puesto 201 - Acceso Norte</option>
+                        <option value="202">Puesto 202 - Acceso Sur</option>
+                        <option value="203">Puesto 203 - Acceso Este</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Sección derecha -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="cedula">Cédula de identidad</label>
+                    <input type="text" id="cedula" name="cedula" value="12345678" />
+                    <button type="button" class="btn" onclick="buscarPropietario()">Buscar propietario</button>
+                </div>
+
+                <div class="dot-section">
+                    <div class="owner-section">
+                        <h3>Propietario</h3>
+                        <div class="owner-info" id="ownerInfo">
+                            <p><strong>Nombre:</strong> Propietario Demo 12345678</p>
+                            <p><strong>Estado:</strong> Activo</p>
+                        </div>
+                    </div>
+
+                    <div class="bonificaciones-section">
+                        <h3>Bonificaciones asignadas</h3>
+                        <table class="bonificaciones-table">
+                            <thead>
+                                <tr>
+                                    <th>Bonificación</th>
+                                    <th>Puesto</th>
+                                    <th>Fecha asignación</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bonificacionesTableBody">
+                                <tr>
+                                    <td colspan="3" class="empty-message">Sin bonificaciones asignadas</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="assign-section">
+                        <h3>Asignar nueva bonificación</h3>
+                        <p class="assign-instruction">Seleccione bonificación y puesto en las listas de la izquierda y
+                            luego asigne.</p>
+                        <button type="button" class="btn" onclick="asignarBonificacion()">Asignar bonificación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Administración</p>
+        </div>
+    </div>
+
+    <script>
+        urlIniciarVista = "/asignarBonificaciones/vistaConectada";
+        urlCierreVista = "/asignarBonificaciones/vistaCerrada";
+
+        function buscarPropietario() {
+            const cedula = document.getElementById('cedula').value;
+
+            if (!cedula) {
+                alert('Por favor ingrese una cédula de identidad');
+                return;
+            }
+
+            // Simulación de búsqueda (puedes reemplazar esto con una llamada a tu API)
+            const ownerInfo = document.getElementById('ownerInfo');
+            ownerInfo.innerHTML = `
+                <p><strong>Nombre:</strong> Propietario Demo ${cedula}</p>
+                <p><strong>Estado:</strong> Activo</p>
+            `;
+        }
+
+        function asignarBonificacion() {
+            const bonificacion = document.getElementById('bonificacion');
+            const puesto = document.getElementById('puesto');
+            const bonificacionText = bonificacion.options[bonificacion.selectedIndex].text;
+            const puestoText = puesto.options[puesto.selectedIndex].text;
+
+            const tableBody = document.getElementById('bonificacionesTableBody');
+
+            // Si la tabla está vacía, limpiar el mensaje
+            if (tableBody.innerHTML.includes('Sin bonificaciones asignadas')) {
+                tableBody.innerHTML = '';
+            }
+
+            // Agregar nueva fila
+            const fecha = new Date().toLocaleDateString('es-UY');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${bonificacionText}</td>
+                <td>${puestoText}</td>
+                <td>${fecha}</td>
+            `;
+            tableBody.appendChild(newRow);
+        }
+    </script>
+</body>
+
+</html>

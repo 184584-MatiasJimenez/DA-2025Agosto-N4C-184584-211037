@@ -39,7 +39,6 @@ public class ControladorTablero {
         // Establecer la conexión SSE con el navegador en este caso el menú admin
         conexionNavegador.conectarSSE();
         return conexionNavegador.getConexionSSE();
-
     }
 
     @GetMapping("/vistaConectada")
@@ -51,7 +50,6 @@ public class ControladorTablero {
             return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
         }
         return Respuesta.lista(new Respuesta("nombreCompleto", propietario.getUsuario().getNombreCompleto()));
-
     }
 
     @GetMapping("/vehiculosPropietario")
@@ -70,12 +68,12 @@ public class ControladorTablero {
         for (Vehiculo vehiculo : vehiculos) {
             vehiculosDto.add(new VehiculoDTO(vehiculo));
         }
-        return Respuesta.lista(
-                new Respuesta("listaVehiculos", vehiculosDto));
+        return Respuesta.lista(new Respuesta("listaVehiculos", vehiculosDto));
     }
 
     @GetMapping("/bonificacionesPropietario")
-        public List<Respuesta> obtenerBonificaciones(@SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
+    public List<Respuesta> obtenerBonificaciones(
+            @SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
 
             if (propietario == null) {
                 return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
