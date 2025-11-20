@@ -4,6 +4,7 @@ import com.example.obligatorioPeajes.modelo.*;
 import com.example.obligatorioPeajes.servicios.fachada.Fachada;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,19 +41,15 @@ public class ServicioUsuario {
     public EstadoPropietario getEstadoHabilitado() {
         return this.estadoHabilitado;
     }
-
     public EstadoPropietario getEstadoDeshabilitado() {
         return this.estadoDeshabilitado;
     }
-
     public EstadoPropietario getEstadoSuspendido() {
         return this.estadoSuspendido;
     }
-
     public EstadoPropietario getEstadoPenalizado() {
         return this.estadoPenalizado;
     }
-
 
 	public Usuario validarCredenciales(String cedula, String contrasenia) {
 		Usuario usuario = this.buscarUsuarioPorCI(cedula);
@@ -169,5 +166,34 @@ public class ServicioUsuario {
             }
         }
         return null;
+    }
+    public EstadoPropietario buscarEstadoPorNombre(String nombreEstado) {
+        for(EstadoPropietario estado : obtenerTodosLosEstados()) {
+            if(estado.getClass().getSimpleName().equals(nombreEstado)) {
+                return estado;
+            }
+        }
+        return null;
+    }
+    public List<EstadoPropietario> obtenerTodosLosEstados() {
+        return Arrays.asList(
+            this.estadoHabilitado,
+            this.estadoDeshabilitado,
+            this.estadoSuspendido,
+            this.estadoPenalizado
+        );
+    }
+
+    public String cambiarEstadoPropietario(String ciPropietario, String nombreNuevoEstado) {
+        Propietario propietario = this.buscarPropietarioPorCI(ciPropietario);
+        if(propietario == null){
+            return "No existe el propietario";
+        }
+        EstadoPropietario nuevoEstado = this.buscarEstadoPorNombre(nombreNuevoEstado); 
+        if(nuevoEstado == null) {
+            return "Error: Estado '"+ nombreNuevoEstado + "' no encontrado en el sistema";
+        }
+        String resultado = propietario.cambiarEstado(nuevoEstado);
+        return resultado;
     }
 }

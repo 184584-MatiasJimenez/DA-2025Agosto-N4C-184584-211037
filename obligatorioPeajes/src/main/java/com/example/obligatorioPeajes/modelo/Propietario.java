@@ -1,6 +1,8 @@
 package com.example.obligatorioPeajes.modelo;
 import java.util.Comparator;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,6 +45,9 @@ public class Propietario extends Usuario {
     public EstadoPropietario getEstado() {
         return estado;
     }
+	public String getNombreEstadoActual() {
+		return this.estado.getClass().getSimpleName();
+	}
 	public void setEstado(EstadoPropietario estado) {
 		this.estado = estado;
 	}
@@ -118,6 +123,20 @@ public class Propietario extends Usuario {
 			}
 		}
 		return null;
+	}
+	public String cambiarEstado(EstadoPropietario nuevoEstado){
+		if(this.estado.getClass().equals(nuevoEstado.getClass())) 
+			return "El propietario ya esta en estado " + nuevoEstado.getClass().getSimpleName();
+		this.setEstado(estado);
+		EstadoPropietario estadoAnterior = this.estado;
+		this.setEstado(nuevoEstado);
+
+		String mensajeNotificacion = "Se ha cambiado tu estado en el sistema. Tu estado actual es " 
+                + nuevoEstado.getClass().getSimpleName();
+				
+		Notificacion notificacion = new Notificacion(LocalDateTime.now(), mensajeNotificacion);
+        this.agregarNotificacion(notificacion);
+		return this.getEstado().getClass().getSimpleName();
 	}
 
 }

@@ -9,7 +9,6 @@ import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import com.example.obligatorioPeajes.dtos.BonificacionDTO;
 import com.example.obligatorioPeajes.dtos.NotificacionDTO;
 import com.example.obligatorioPeajes.dtos.TransitoDTO;
-import java.util.Collections;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
 import java.util.*;
 
@@ -119,12 +118,16 @@ public class Fachada extends Observable {
 		return null;
 	}
 
-	public java.util.List<EstadoPropietario> obtenerListaEstadosPropietario() {
-		return null;
+	public List<EstadoPropietario> obtenerListaEstadosPropietario() {
+		return this.servicioUsuario.obtenerTodosLosEstados();
 	}
 
-	public void cambiarEstadoPropietario(String ciPropietario, String nombreNuevoEstado) {
-
+	public String cambiarEstadoPropietario(String ciPropietario, String nombreNuevoEstado) {
+		String resultado = this.servicioUsuario.cambiarEstadoPropietario(ciPropietario, nombreNuevoEstado);
+		if (!resultado.startsWith("No existe") && !resultado.startsWith("El propietario ya esta")) {
+            this.avisar(Eventos.nuevoUsuarioConectado); 
+        }
+        return resultado;
 	}
 
 	public void asignarBonificacion(String ciPropietario, String nombreBonif, String nombrePuesto) {

@@ -50,8 +50,8 @@
         <div class="owner-section" id="ownerSection">
             <h3>Propietario</h3>
             <div class="owner-info" id="ownerInfo">
-                <p><span class="label">Nombre:</span> <span class="value">Propietario Demo 12345678</span></p>
-                <p><span class="label">Estado actual:</span> <span class="value">Activo</span></p>
+                <p><span class="label">Nombre:</span> <span class="value" id="ownerNameDisplay">---</span></p>
+                <p><span class="label">Estado actual:</span> <span class="value" id="estadoActualDisplay">---</span></p>
             </div>
         </div>
 
@@ -61,9 +61,24 @@
     </div>
 
     <script>
+        const estadoSelect = document.getElementById('estado');
+        const ownerInfo = document.getElementById('ownerInfo'); 
+        const ownerNameDisplay = document.getElementById('ownerNameDisplay'); 
+        const estadoActualDisplay = document.getElementById('estadoActualDisplay');
+        
         urlIniciarVista = "/cambiarEstadoPropietario/vistaConectada";
         urlCierreVista = "/cambiarEstadoPropietario/vistaCerrada";
 
+        // Función para limpiar la vista
+        function resetearVista() {
+            if (estadoSelect) estadoSelect.innerHTML = '<option value="">Buscar propietario primero</option>';
+            if (ownerNameDisplay) ownerNameDisplay.textContent = '---';
+            if (estadoActualDisplay) estadoActualDisplay.textContent = '---';
+        }
+        function mostrarInfoPropietario(nombre, estado) {
+            ownerNameDisplay.textContent = nombre;
+            estadoActualDisplay.textContent = estado;
+        }
         function buscarPropietario() {
             const cedula = document.getElementById('cedula').value;
             
@@ -71,39 +86,74 @@
                 alert('Por favor ingrese una cédula de identidad');
                 return;
             }
-
-            // Simulación de búsqueda (puedes reemplazar esto con una llamada a tu API)
-            const ownerInfo = document.getElementById('ownerInfo');
-            const estadoSelect = document.getElementById('estado');
-            
-            // Actualizar información del propietario
-            ownerInfo.innerHTML = `
-                <p><span class="label">Nombre:</span> <span class="value">Propietario Demo ${cedula}</span></p>
-                <p><span class="label">Estado actual:</span> <span class="value">Activo</span></p>
-            `;
-
-            // Preseleccionar el estado actual en el select
-            estadoSelect.value = 'activo';
+            const urlData = 'cedula=' + encodeURIComponent(cedula);
+            submit(
+                '/cambiarEstadoPropietario/buscarPropietario',
+                urlData,
+                'GET'
+            );
         }
-
         function cambiarEstado() {
-            const cedula = document.getElementById('cedula').value;
-            const nuevoEstado = document.getElementById('estado');
-            const estadoText = nuevoEstado.options[nuevoEstado.selectedIndex].text;
+            const cedula = document.getElementById('cedula').value.trim();
+            const nuevoEstado = estadoSelect.value;
             
-            if (!cedula) {
-                alert('Por favor busque primero un propietario');
+            if (!cedula || ownerNameDisplay.textContent === '---') {
+                alert('Por favor busque un propietario primero.');
                 return;
             }
-
-            // Simulación de cambio de estado (puedes reemplazar esto con una llamada a tu API)
-            const ownerInfo = document.getElementById('ownerInfo');
-            ownerInfo.innerHTML = `
-                <p><span class="label">Nombre:</span> <span class="value">Propietario Demo ${cedula}</span></p>
-                <p><span class="label">Estado actual:</span> <span class="value">${estadoText}</span></p>
-            `;
-
-            alert(`Estado cambiado a: ${estadoText}`);
+            
+            if (!nuevoEstado) {
+                alert('Por favor seleccione un nuevo estado.');
+                return;
+            } 
+            const estadoSeleccionadoText = estadoSelect.options[estadoSelect.selectedIndex].textContent;    
+            if (estadoSeleccionadoText === estadoActualDisplay.textContent) {
+                alert('El propietario ya se encuentra en el estado seleccionado.');
+                return;
+            }
+            submit(
+                '/cambiarEstadoPropietario/cambiarEstado', 
+                'cedula,nuevoEstado',
+                `${cedula},${nuevoEstado}`,
+                ['nuevoEstado', 'exito']
+            );
+        }
+        function inicializarSelect() {
+            estadoSelect.innerHTML = '<option value="">Seleccione un estado</option>';
+            ownerInfo.innerHTML = '';
+        }
+        function mostrar_nombreCompleto(nombre) {
+            if (ownerNameDisplay) ownerNameDisplay.textContent = nombre;
+        }
+        function mostrar_listaEstados(listaEstadosJson) {
+            const estados = JSON.parse(listaEstadosJson); 
+            estadoSelect.innerHTML = ''; 
+            estados.forEach(estado => {
+                const option = document.createElement('option');
+                option.value = estado.value;
+                option.textContent = estado.nombre;
+                estadoSelect.appendChild(option);
+            });
+        }
+        function mostrar_estadoActual(estado) {
+            if (estadoActualDisplay) estadoActualDisplay.textContent = estado;
+            if (estadoSelect) estadoSelect.value = estado.toLowerCase();
+        }
+        function mostrar_nuevoEstado(nombreNuevoEstado) {
+            estadoActualDisplay.textContent = nombreNuevoEstado;
+            for (let i = 0; i < estadoSelect.options.length; i++) {
+                if (estadoSelect.options[i].textContent === nombreNuevoEstado) {
+                    estadoSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+        function mostrar_exito(mensaje) {
+            alert(mensaje);
+        }
+        function mostrar_error(mensaje) {
+            alert('Error en la búsqueda: ' + mensaje); 
+            resetearVista(); 
         }
     </script>
 </body>
