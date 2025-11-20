@@ -101,21 +101,20 @@
                 alert('Por favor busque un propietario primero.');
                 return;
             }
-            
             if (!nuevoEstado) {
                 alert('Por favor seleccione un nuevo estado.');
                 return;
-            } 
+            }
             const estadoSeleccionadoText = estadoSelect.options[estadoSelect.selectedIndex].textContent;    
             if (estadoSeleccionadoText === estadoActualDisplay.textContent) {
                 alert('El propietario ya se encuentra en el estado seleccionado.');
                 return;
             }
+            const urlData = 'cedula=' + encodeURIComponent(cedula) + '&nuevoEstado=' + encodeURIComponent(nuevoEstado);
             submit(
-                '/cambiarEstadoPropietario/cambiarEstado', 
-                'cedula,nuevoEstado',
-                `${cedula},${nuevoEstado}`,
-                ['nuevoEstado', 'exito']
+                '/cambiarEstadoPropietario/cambiarEstado',
+                urlData,
+                'POST'
             );
         }
         function inicializarSelect() {
