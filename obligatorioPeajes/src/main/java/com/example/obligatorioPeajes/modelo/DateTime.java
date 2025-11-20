@@ -11,6 +11,10 @@ public class DateTime {
         this.fechaHora = fechaHora;
     }
 
+    public static DateTime fechaActual() {
+        return new DateTime(LocalDateTime.now());
+    }
+
     public LocalDateTime getFechaHora() {
         return fechaHora;
     }

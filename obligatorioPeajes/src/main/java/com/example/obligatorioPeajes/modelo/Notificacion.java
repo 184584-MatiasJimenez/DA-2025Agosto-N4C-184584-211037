@@ -18,8 +18,11 @@ public class Notificacion {
     public String getMensaje() {
         return mensaje;
     }
+
     public Notificacion(LocalDateTime fechaHora, String mensaje) {
         this.fechaHora = fechaHora;
         this.mensaje = mensaje;
     }
+
+    
 }

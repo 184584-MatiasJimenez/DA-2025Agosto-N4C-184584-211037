@@ -10,7 +10,6 @@ import com.example.obligatorioPeajes.dtos.BonificacionDTO;
 import com.example.obligatorioPeajes.dtos.NotificacionDTO;
 import com.example.obligatorioPeajes.dtos.PuestoDePeajeDTO;
 import com.example.obligatorioPeajes.dtos.TransitoDTO;
-import java.util.Collections;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
 import java.util.*;
 
@@ -164,11 +163,20 @@ public class Fachada extends Observable {
 		}
 
 		Transito creado = servicioTransito.registrarTransito(vehiculo, nombrePuesto, fechaHora);
-		// descontar saldo del propietario luego de registrar el tránsito
+		DateTime ahora = DateTime.fechaActual();
+		Notificacion notificacion = null;
 		if (creado != null && propietario != null) {
 			propietario.restarSaldo(creado.getMontoPagado());
+			notificacion = new Notificacion(ahora.getFechaHora(), "Pasaste por el puesto " + puesto.getNombre() + " con el vehículo " + vehiculo.getMatricula() + ".");
+			propietario.agregarNotificacion(notificacion);
 		}
-		return new TransitoDTO(creado);
+		TransitoDTO transitoDTO = new TransitoDTO(creado);
+		if(transitoDTO.getSaldoPosterior() < tarifaBase) {
+			notificacion = new Notificacion(ahora.getFechaHora(), "Tu saldo actual es de $ " + transitoDTO.getSaldoPosterior() + ", te recomendamos hacer una recarga.");
+			propietario.agregarNotificacion(notificacion);
+		}
+
+		return transitoDTO;
 	}
 
 }
