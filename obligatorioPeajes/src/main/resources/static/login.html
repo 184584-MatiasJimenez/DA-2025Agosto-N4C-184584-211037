@@ -4,133 +4,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Obligatorio Peajes</title>
-    <link rel="stylesheet" href="css/estilos.css">
+    <title>Ingreso a la aplicación</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/modal.css">
     <script src="vistaWeb.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Estilos esenciales y para el modal */
-        :root {
-            --color-primary: #007bff;
-            --color-secondary: #0056b3;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f4f7f9;
-        }
-
-        #main-app-container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        #login-view {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        .btn-ingresar {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-
-        .btn-ingresar:hover {
-            background-color: var(--color-secondary);
-        }
-
-        /* Modal Styles */
-        #mensajeDlg {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #mensajeDlg .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
-        }
-
-        #botonAceptar {
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        #botonAceptar:hover {
-            background-color: var(--color-secondary);
-        }
-    </style>
 </head>
 
 <body>
     <script src="utilesVista.js"></script>
     <div id="main-app-container">
         <div id="login-view">
-            <h2>Ingreso a la Aplicación</h2>
-            <p id="rolTexto" style="margin-top:8px;color:#333;font-weight:600;"></p>
-            <form id="loginForm" onsubmit="acceder(event);">
-                <div class="form-group">
-                    <label for="cedula">Cédula:</label>
-                    <input type="text" id="cedula" name="cedula" required>
+            <div class="login-card">
+                <div class="header-section">
+                    <div class="app-icon"></div>
+                    <h1>Ingreso a la aplicación</h1>
                 </div>
-                <div class="form-group">
-                    <label for="contrasenia">Contraseña:</label>
-                    <input type="password" id="contrasenia" name="contrasenia" required>
-                </div>
-                <input type="hidden" id="rol" name="rol" value="propietario">
-                <button type="submit" class="btn-ingresar">Ingresar</button>
-            </form>
+                <p class="subtitle">Por favor ingrese con su cédula de identidad y contraseña.</p>
+                <p id="rolTexto" style="margin-top:8px;color:#333;font-weight:600;"></p>
+
+                <form id="loginForm" onsubmit="acceder(event);">
+                    <div class="form-group">
+                        <label for="cedula">Cédula de identidad</label>
+                        <input type="text" id="cedula" name="cedula" placeholder="Ej: 41234567" required>
+                        <p class="hint-text">Solo números, sin puntos ni guiones.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contrasenia">Contraseña</label>
+                        <input type="password" id="contrasenia" name="contrasenia" placeholder="Ingrese su contraseña"
+                            required>
+                    </div>
+
+                    <input type="hidden" id="rol" name="rol" value="propietario">
+                    <button type="submit" class="btn-ingresar">Ingresar</button>
+                </form>
+
+                <p id="footerText" class="footer-text">© 2025 - Acceso de </p>
+            </div>
         </div>
 
         <div id="cu-views" style="display:none;">
@@ -147,7 +58,7 @@
     </div>
 
     <script>
-        (function() {
+        (function () {
             try {
                 const params = new URLSearchParams(window.location.search);
                 const rol = params.get('rol');
@@ -165,7 +76,15 @@
                 const rolTexto = document.getElementById('rolTexto');
                 if (rolTexto) {
                     const textoFormateado = rol.charAt(0).toUpperCase() + rol.slice(1).toLowerCase();
-                    rolTexto.textContent = `Ingreso como: ${textoFormateado}`;
+                    const footer = document.getElementById("footerText");
+
+                    if (textoFormateado === "Propietario") {
+                        footer.textContent += "propietarios";
+                    } else if (textoFormateado === "Administrador") {
+                        footer.textContent += "administradores";
+                    } else {
+                        footer.textContent += "usuario";
+                    }
                 }
             } catch (e) {
                 console.warn('No se pudo leer el rol desde la URL:', e);

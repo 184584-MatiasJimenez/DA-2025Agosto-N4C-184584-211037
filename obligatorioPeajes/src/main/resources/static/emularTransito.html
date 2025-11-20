@@ -1,1 +1,123 @@
-Hola
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emular tránsito</title>
+    <link rel="stylesheet" href="css/emulador.css">
+    <script src='vistaWeb.js'></script>
+    <script src='sse.js'></script>
+</head>
+
+<body>
+    <script src="utilesVista.js"></script>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon"></div>
+            <h1>Emular tránsito</h1>
+        </div>
+        <p class="subtitle">Seleccione un puesto, verifique sus tarifas, ingrese una matricula y emule un tránsito.</p>
+
+        <div class="main-content">
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="puesto">Puesto</label>
+                    <select id="puesto" name="puesto">
+                        <option value="101">Puesto 101 - Acceso Norte</option>
+                        <option value="102">Puesto 102 - Acceso Sur</option>
+                        <option value="103">Puesto 103 - Acceso Este</option>
+                        <option value="104">Puesto 104 - Acceso Oeste</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="matricula">Matrícula</label>
+                    <input type="text" id="matricula" name="matricula" placeholder="Ej: ABC1234" />
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaHora">Fecha y hora del transito</label>
+                    <input type="text" id="fechaHora" name="fechaHora" placeholder="Ej: 2025-11-19 15:30" />
+                </div>
+
+                <button type="button" class="btn-emular" onclick="emularTransito()">Emular tránsito</button>
+            </div>
+
+            <div class="tarifas-section">
+                <h3>Tarifas del puesto</h3>
+                <table class="tarifas-table">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>A (Auto)</td>
+                            <td>$120.00</td>
+                        </tr>
+                        <tr>
+                            <td>B (Camioneta)</td>
+                            <td>$180.00</td>
+                        </tr>
+                        <tr>
+                            <td>C (Camión)</td>
+                            <td>$280.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="tarifas-description">Se muestran categoría y monto actuales del puesto seleccionado.</p>
+            </div>
+        </div>
+
+        <div class="resultado-section" id="resultadoSection" style="display: none;">
+            <h3>Resultado</h3>
+            <div class="resultado-content" id="resultadoContent">
+                <!-- Los resultados se mostrarán aquí dinámicamente -->
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Emular transitos</p>
+        </div>
+    </div>
+
+    <script>
+        urlIniciarVista = "/emularTransito/vistaConectada";
+        urlCierreVista = "/emularTransito/vistaCerrada";
+        
+        function emularTransito() {
+            const puesto = document.getElementById('puesto').value;
+            const matricula = document.getElementById('matricula').value;
+            const fechaHora = document.getElementById('fechaHora').value;
+
+            if (!matricula || !fechaHora) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+
+            // Simulación de resultado (puedes reemplazar esto con una llamada a tu API)
+            const resultadoContent = document.getElementById('resultadoContent');
+            resultadoContent.innerHTML = `
+                <p><strong>Propietario:</strong> Juan Pérez (Activo)</p>
+                <p><strong>Categoría:</strong> A (Auto)</p>
+                <p><strong>Bonificación:</strong> Residente Costa de Oro (10%)</p>
+                <p><strong>Costo del tránsito:</strong> $ 120.00</p>
+                <p><strong>Saldo luego del tránsito:</strong> $ 1400.75</p>
+            `;
+
+            document.getElementById('resultadoSection').style.display = 'block';
+        }
+
+        // Actualizar tarifas cuando cambia el puesto
+        document.getElementById('puesto').addEventListener('change', function() {
+            // Aquí puedes agregar lógica para actualizar las tarifas según el puesto seleccionado
+            // Por ahora mantenemos las mismas tarifas
+        });
+    </script>
+</body>
+
+</html>
