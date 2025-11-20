@@ -74,15 +74,15 @@ public class ControladorTablero {
     }
 
     @GetMapping("/bonificacionesPropietario")
-        public List<Respuesta> obtenerBonificaciones(@SessionAttribute(name = "sesion", required = false) Sesion sesion) {
+        public List<Respuesta> obtenerBonificaciones(@SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
 
-            if (sesion == null) {
-                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+            if (propietario == null) {
+                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
             }
-            if (!(sesion.getUsuario() instanceof Propietario propietario)) {
-                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+            if (!(propietario.getUsuario() instanceof Propietario)) {
+                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
             }
-            List<BonificacionDTO> bonificacionesDto = fachada.obtenerBonificacionesPropietario(propietario.getCedula());
+            List<BonificacionDTO> bonificacionesDto = fachada.obtenerBonificacionesPropietario(propietario.getUsuario().getCedula());
             return Respuesta.lista(new Respuesta("listaBonificaciones", bonificacionesDto));
         }
 }
