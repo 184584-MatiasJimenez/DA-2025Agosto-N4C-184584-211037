@@ -63,6 +63,16 @@ public abstract class Vehiculo {
 		return transitos;
 	}
 
+	protected void setCategoria(CategoriaVehiculo categoria) {
+		this.categoria = categoria;
+	}
+	public void agregarTransito(Transito transito) {
+		if(this.transitos == null) {
+			this.transitos = new ArrayList<>();
+		}
+		this.transitos.add(transito);
+	}
+
 	public int getCantidadTransitos() {
 		return (transitos!= null) ? transitos.size() : 0;
 	}

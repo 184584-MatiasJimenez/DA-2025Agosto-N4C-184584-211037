@@ -5,7 +5,7 @@ import com.example.obligatorioPeajes.servicios.fachada.Fachada;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+import java.util.List;
 
 public class ServicioUsuario {
 
@@ -136,12 +136,13 @@ public class ServicioUsuario {
             String marca, String modelo, String color, int anio, CategoriaVehiculo categoria) {
 
         Vehiculo nuevoVehiculo = null;
+        String nombreCategoria = categoria.getNombre();
 
-        if (categoria.getNombre().equals("Automóvil")) {
+        if (nombreCategoria.equals("Automóvil")) {
             nuevoVehiculo = new Auto(matricula, marca, modelo, color, anio, propietario);
-        } else if (categoria.getNombre().equals("Camioneta")) {
+        } else if (nombreCategoria.equals("Camioneta")) {
             nuevoVehiculo = new Camioneta(matricula, marca, modelo, color, anio, propietario);
-        } else if (categoria.getNombre().equals("Moto")) {
+        } else if (nombreCategoria.equals("Moto")) {
             nuevoVehiculo = new Moto(matricula, marca, modelo, color, anio, propietario);
         }
 
@@ -150,11 +151,23 @@ public class ServicioUsuario {
         }
     }
     
-    public java.util.List<Vehiculo> obtenerVehiculosPropietario(String ci) {
-    Propietario propietario = this.buscarPropietarioPorCI(ci);
-    if (propietario != null) {
-        return new ArrayList<>(propietario.getVehiculos());
+    public List<Vehiculo> obtenerVehiculosPropietario(String ci) {
+        Propietario propietario = this.buscarPropietarioPorCI(ci);
+        if (propietario != null) {
+            return new ArrayList<>(propietario.getVehiculos());
+        }
+        return new ArrayList<>();
     }
-    return new ArrayList<>();
-}
+
+    public Vehiculo buscarVehiculoPorMatricula(String matricula) {
+        for (Usuario usuario : this.usuarios) {
+            if(usuario instanceof Propietario propietario) {
+                Vehiculo vehiculoEncontrado = propietario.buscarVehiculoPorMatricula(matricula);
+                if(vehiculoEncontrado != null) {
+                    return vehiculoEncontrado;
+                }
+            }
+        }
+        return null;
+    }
 }

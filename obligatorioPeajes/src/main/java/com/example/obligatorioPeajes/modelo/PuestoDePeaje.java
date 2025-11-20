@@ -44,5 +44,4 @@ public class PuestoDePeaje {
     public boolean tuvoTransitoHoy(Vehiculo v) {
         return false;
     }
-
 }

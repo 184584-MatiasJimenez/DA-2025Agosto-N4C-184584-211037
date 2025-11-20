@@ -43,27 +43,50 @@
                 </div>
             </div>
 
-            <!-- Tabla -->
-            <h2>Vehículos Registrados</h2>
-            <div class="table-container">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Matrícula</th>
-                            <th>Modelo</th>
-                            <th>Color</th>
-                            <th>Tránsitos</th> <th>Monto Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="vehiculos-body">
-                        <tr>
-                            <td colspan="3" class="text-center">Cargando vehículos...</td>
-                        </tr>
-                    </tbody>
-                </table>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-700">Bonificaciones asignadas</h2>
+                    <div class="table-container overflow-x-auto">
+                        <table class="data-table w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="p-2">Bonificación</th>
+                                    <th class="p-2">Puesto</th>
+                                    <th class="p-2">Fecha asignada</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bonificaciones-body">
+                                <tr>
+                                    <td colspan="3" class="text-center p-4 text-gray-500">Cargando bonificaciones...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-700">Vehículos registrados</h2>
+                    <div class="table-container overflow-x-auto">
+                        <table class="data-table w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="p-2">Matrícula</th>
+                                    <th class="p-2">Modelo</th>
+                                    <th class="p-2">Color</th>
+                                    <th class="p-2">Tránsitos</th> 
+                                    <th class="p-2">Monto Total</th> 
+                                </tr>
+                            </thead>
+                            <tbody id="vehiculos-body">
+                                <tr>
+                                    <td colspan="5" class="text-center p-4 text-gray-500">Cargando vehículos...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 
     <!-- Modal -->
     <div id="mensajeDlg">
@@ -133,14 +156,15 @@
                 document.body.innerHTML = '';
             }
         }
-
+        
+        //cargar vehiculos
         function cargarVehiculos() {
             submit("/menuTablero/vehiculosPropietario", null, 'GET');
         }
 
         const configuracionColumnasVehiculos = [
             { campo: 'matricula' },
-            { campo: 'modelo', compuesto: ['marca', 'modelo'], separador: ' ' },
+            { campo: 'modelo'},
             { campo: 'color' },
             { campo: 'cantidadTransitos' },
             { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
@@ -156,6 +180,39 @@
         function primerSubmitFinalizado() {
             cargarVehiculos();
         }
+
+        //cargar bonificaciones
+        const configuracionColumnasBonificaciones = [
+            { campo: 'nombreBonificacion' }, 
+            { campo: 'nombrePuesto' },       
+            { campo: 'fechaAsignada' }       
+        ];
+        // 2. Función que RECIBE los datos del servidor (El nombre debe ser mostrar_ + la clave de la Respuesta)
+        function mostrar_listaBonificaciones(bonificaciones) {
+            const tbody = document.getElementById('bonificaciones-body');
+            
+            if (!bonificaciones || bonificaciones.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4">No tienes bonificaciones asignadas.</td></tr>';
+                return;
+            }
+
+            // Usamos tu función de utilidad para generar el HTML
+            tbody.innerHTML = crearFilasTablaDesdeJson({
+                data : bonificaciones,
+                columnas: configuracionColumnasBonificaciones
+            });
+        }
+
+        // 3. MODIFICAR esta función para que llame a cargarBonificaciones al inicio
+        function primerSubmitFinalizado() {
+            cargarVehiculos();
+            cargarBonificaciones(); // <--- ¡ESTO FALTABA!
+        }
+        function cargarBonificaciones() {
+            submit("/menuTablero/bonificacionesPropietario", null, 'GET');
+        }
+
+
         
     </script>
 

@@ -31,10 +31,44 @@ public class ServicioTransito {
         return null;
     }
 
-    public Transito registrarTransito(String matricula, String nombrePuesto, DateTime fecha) {
+    public Transito registrarTransito(Vehiculo vehiculo, String nombrePuesto, DateTime fecha) {
+        if(vehiculo == null) {
+            return null;
+        }
+        PuestoDePeaje puesto = buscarPuestoDePeajePorNombre(nombrePuesto);
+        if (puesto == null) return null;
+
+        Tarifa tarifaObj = buscarTarifa(puesto, vehiculo.getCategoria());
+        double tarifaBase = (tarifaObj != null) ? tarifaObj.getMonto() : 0.0;
+        Transito nuevoTransito = new Transito(
+            fecha, 
+            vehiculo, 
+            puesto, 
+            tarifaBase
+            );
+        vehiculo.agregarTransito(nuevoTransito); 
+        this.transito.add(nuevoTransito);
+        
+        return nuevoTransito;
+    }
+    public PuestoDePeaje buscarPuestoDePeajePorNombre(String nombre) {
+        for (PuestoDePeaje puesto : this.puestosDePeaje) {
+            if (puesto.getNombre().equalsIgnoreCase(nombre)) {
+                return puesto;
+            }
+        }
         return null;
     }
 
+    public Tarifa buscarTarifa(PuestoDePeaje puesto, CategoriaVehiculo categoria) {
+        if(puesto == null || categoria == null) return null;
+        for(Tarifa t: this.tarifas) {
+            if(t.getPuesto().equals(puesto) && t.getCategoria().equals(categoria)) {
+                return t;
+            }
+        }
+        return null;
+    }
     public static ServicioTransito getInstancia() {
         if (instancia == null) {
             instancia = new ServicioTransito();
