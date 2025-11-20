@@ -111,6 +111,24 @@
             </table>
         </div>
     </div>
+    <div class="bg-white p-4 rounded-lg shadow-md mt-6">
+        <h2 class="text-xl font-bold mb-4 text-gray-700">Notificaciones Recientes 🔔</h2>
+        <div class="table-container overflow-x-auto">
+            <table class="data-table w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-gray-100 border-b">
+                        <th class="p-2">Fecha/Hora</th>
+                        <th class="p-2">Mensaje</th>
+                    </tr>
+                </thead>
+                <tbody id="notificaciones-body">
+                    <tr>
+                        <td colspan="2" class="text-center p-4 text-gray-500">Cargando notificaciones...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div id="mensajeDlg">
@@ -221,6 +239,7 @@
             cargarVehiculos();
             cargarBonificaciones();
             cargarHistorialTransitos();
+            cargarNotificaciones();
         }
         function cargarBonificaciones() {
             submit("/menuTablero/bonificacionesPropietario", null, 'GET');
@@ -256,8 +275,29 @@
             });
         }
 
+        const configuracionColumnasNotificaciones = [
+            { campo: 'fechaHora' },
+            { campo: 'mensaje' }
+        ];
+        function cargarNotificaciones() {
+            submit("/menuTablero/notificacionesPropietario", null, 'GET');
+        }
 
-        
+        function mostrar_listaNotificaciones(notificaciones) {
+            const tbody = document.getElementById('notificaciones-body');
+
+            if (!notificaciones || notificaciones.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2" class="text-center p-4">No hay notificaciones nuevas.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = crearFilasTablaDesdeJson({
+                data : notificaciones,
+                columnas: configuracionColumnasNotificaciones
+            });
+        }
+
+
     </script>
 
 </body>

@@ -12,16 +12,15 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.http.MediaType;
 
 import com.example.obligatorioPeajes.dtos.BonificacionDTO;
+import com.example.obligatorioPeajes.dtos.NotificacionDTO;
 import com.example.obligatorioPeajes.dtos.TransitoDTO;
 import com.example.obligatorioPeajes.dtos.VehiculoDTO;
-import com.example.obligatorioPeajes.modelo.BonificacionAsignada;
 import com.example.obligatorioPeajes.modelo.Propietario;
 import com.example.obligatorioPeajes.modelo.Sesion;
 import com.example.obligatorioPeajes.modelo.Vehiculo;
 import com.example.obligatorioPeajes.servicios.fachada.Fachada;
 import com.example.obligatorioPeajes.utils.Respuesta;
 import com.example.obligatorioPeajes.utils.ConexionNavegador;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/menuTablero")
@@ -96,5 +95,14 @@ public class ControladorTablero {
         List<TransitoDTO> transitosDto = fachada.obtenerHistorialTransitos(propietario.getUsuario().getCedula());
         return Respuesta.lista(new Respuesta("listaTransitos", transitosDto));
     }
-    
+    @GetMapping("/notificacionesPropietario")
+    public List<Respuesta> obtenerNotificaciones(
+            @SessionAttribute(name = "USUARIO_PROPIETARIO_STATE_KEY", required = false) Sesion propietario) {
+
+        if (propietario == null || !(propietario.getUsuario() instanceof Propietario)) {
+            return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "login.html"));
+        }
+        List<NotificacionDTO> notificacionesDto = fachada.obtenerNotificaciones(propietario.getUsuario().getCedula());
+        return Respuesta.lista(new Respuesta("listaNotificaciones", notificacionesDto));
+    }
 }

@@ -1,5 +1,5 @@
 package com.example.obligatorioPeajes.modelo;
-
+import java.util.Comparator;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,8 +31,6 @@ public class Propietario extends Usuario {
 		this.vehiculos = new ArrayList<>();
 		this.estado = ServicioUsuario.getInstancia().getEstadoHabilitado();
 	}
-	
-
     public int getId() {
         return id;
     }
@@ -52,6 +50,10 @@ public class Propietario extends Usuario {
         return bonificacionesAsignadas;
     }
     public List<Notificacion> getNotificaciones() {
+		if(this.notificaciones == null) this.notificaciones = new ArrayList<>();
+		List<Notificacion> listaOrdenable = new ArrayList<>(this.notificaciones);
+		//Comparator<Notificacion> fechaComparator = Comparator.comparing(Notificacion::getFechaHora);
+		//listaOrdenable.sort(fechaComparator.reversed());
         return notificaciones;
     }
     public String getNombre() {

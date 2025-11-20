@@ -7,7 +7,9 @@ import com.example.obligatorioPeajes.servicios.ServicioPrecarga;
 import com.example.obligatorioPeajes.servicios.ServicioTransito;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import com.example.obligatorioPeajes.dtos.BonificacionDTO;
+import com.example.obligatorioPeajes.dtos.NotificacionDTO;
 import com.example.obligatorioPeajes.dtos.TransitoDTO;
+import java.util.Collections;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
 import java.util.*;
 
@@ -92,8 +94,13 @@ public class Fachada extends Observable {
         return listaDTos;
 	}
 
-	public List<Notificacion> obtenerNotificaciones(String cedula) {
-		return null;
+	public List<NotificacionDTO> obtenerNotificaciones(String cedula) {
+		Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
+		if(propietario != null) {
+			List<Notificacion> notificaciones = propietario.getNotificaciones();
+			return NotificacionDTO.fromList(notificaciones);
+		}
+		return Collections.emptyList();
 	}
 
 	public void borrarNotificaciones(String cedula) {
