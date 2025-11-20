@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.springframework.http.MediaType;
 
+import com.example.obligatorioPeajes.dtos.BonificacionDTO;
 import com.example.obligatorioPeajes.dtos.VehiculoDTO;
+import com.example.obligatorioPeajes.modelo.BonificacionAsignada;
 import com.example.obligatorioPeajes.modelo.Propietario;
 import com.example.obligatorioPeajes.modelo.Sesion;
 import com.example.obligatorioPeajes.modelo.Vehiculo;
@@ -70,4 +72,17 @@ public class ControladorTablero {
         return Respuesta.lista(
             new Respuesta("listaVehiculos", vehiculosDto));
     }
+
+    @GetMapping("/bonificacionesPropietario")
+        public List<Respuesta> obtenerBonificaciones(@SessionAttribute(name = "sesion", required = false) Sesion sesion) {
+
+            if (sesion == null) {
+                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+            }
+            if (!(sesion.getUsuario() instanceof Propietario propietario)) {
+                return Respuesta.lista(new Respuesta("usuarioNoAutenticado", "loginPropietario.html"));
+            }
+            List<BonificacionDTO> bonificacionesDto = fachada.obtenerBonificacionesPropietario(propietario.getCedula());
+            return Respuesta.lista(new Respuesta("listaBonificaciones", bonificacionesDto));
+        }
 }

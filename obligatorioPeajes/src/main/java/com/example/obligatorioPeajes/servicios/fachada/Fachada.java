@@ -6,7 +6,9 @@ import com.example.obligatorioPeajes.servicios.ServicioBonificacion;
 import com.example.obligatorioPeajes.servicios.ServicioPrecarga;
 import com.example.obligatorioPeajes.servicios.ServicioTransito;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
+import com.example.obligatorioPeajes.dtos.BonificacionDTO;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
+import java.util.*;
 
 public class Fachada extends Observable {
 	public enum Eventos{
@@ -48,11 +50,23 @@ public class Fachada extends Observable {
 		return null;
 	}
 
-	public java.util.List<BonificacionAsignada> obtenerBonificacionesPropietario(String cedula) {
-		return null;
+	public List<BonificacionDTO> obtenerBonificacionesPropietario(String cedula) {
+		// 1. Obtener la entidad del dominio
+		Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
+		
+		List<BonificacionDTO> listaDTos = new ArrayList<>();
+		
+		if (propietario != null) {
+			List<BonificacionAsignada> asignadas = propietario.obtenerBonificacionesAsignadas();
+			
+			for (BonificacionAsignada b : asignadas) {
+				listaDTos.add(new BonificacionDTO(b));
+			}
+		}
+		return listaDTos;
 	}
 
-	public java.util.List<Vehiculo> obtenerVehiculosPropietario(String cedula) {
+	public List<Vehiculo> obtenerVehiculosPropietario(String cedula) {
 		return this.servicioUsuario.obtenerVehiculosPropietario(cedula);
 	}
 

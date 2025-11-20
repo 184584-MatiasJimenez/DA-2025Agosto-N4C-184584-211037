@@ -130,9 +130,9 @@ public class ServicioPrecarga {
 		}
 
 		//buscar bonificaciones
-        Bonificacion bonifExonerado = sistemaBonificacion.buscarBonificacionPorNombre("Exonerado");
-        Bonificacion bonifFrecuente = sistemaBonificacion.buscarBonificacionPorNombre("Frecuente");
-        Bonificacion bonifTrabajador = sistemaBonificacion.buscarBonificacionPorNombre("Trabajador");
+        Bonificacion bonifExonerado = sistemaBonificacion.buscarBonificacionPorNombre("Exonerados");
+        Bonificacion bonifFrecuente = sistemaBonificacion.buscarBonificacionPorNombre("Frecuentes");
+        Bonificacion bonifTrabajador = sistemaBonificacion.buscarBonificacionPorNombre("Trabajadores");
         //asignar bonificaciones a propietarios
         sistemaBonificacion.asignarBonificacion(propE, puesto4, bonifExonerado);
         sistemaBonificacion.asignarBonificacion(propA, puesto1, bonifFrecuente);
