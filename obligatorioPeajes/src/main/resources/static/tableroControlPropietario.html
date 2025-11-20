@@ -189,6 +189,22 @@
             submit("/menuTablero/vehiculosPropietario", null, 'GET');
         }
 
+        const configuracionColumnasVehiculos = [
+            { campo: 'matricula' },
+            { campo: 'modelo' },
+            { campo: 'color' },
+            { campo: 'cantidadTransitos' },
+            { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
+        ];
+
+        function mostrar_listaVehiculos(vehiculos) {
+            const tbody = document.getElementById('vehiculos-body');
+            tbody.innerHTML = crearFilasTablaDesdeJson({
+                data: vehiculos,
+                columnas: configuracionColumnasVehiculos
+            });
+        }
+
         //Cargar bonificaciones
         const configuracionColumnasBonificaciones = [
             { campo: 'nombreBonificacion' },
