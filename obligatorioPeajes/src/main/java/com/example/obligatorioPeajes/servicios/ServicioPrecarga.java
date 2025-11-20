@@ -137,6 +137,25 @@ public class ServicioPrecarga {
         sistemaBonificacion.asignarBonificacion(propE, puesto4, bonifExonerado);
         sistemaBonificacion.asignarBonificacion(propA, puesto1, bonifFrecuente);
         sistemaBonificacion.asignarBonificacion(propB, puesto2, bonifTrabajador);
-        }
+        
+
+		LocalDateTime fechaNotif1 = LocalDateTime.of(2025, 11, 20, 9, 0, 0); // Hoy a las 9:00 AM
+        String mensaje1 = String.format("Pasaste por el puesto %s con el vehículo %s.", puesto1.getNombre(), "ABC123");
+        Notificacion notificacion1 = new Notificacion(fechaNotif1, mensaje1);
+
+        propA.agregarNotificacion(notificacion1);
+		LocalDateTime fechaNotif2 = LocalDateTime.of(2025, 11, 19, 15, 30, 0); // Ayer a las 3:30 PM
+        String mensaje2 = String.format("Pasaste por el puesto %s con el vehículo %s.", puesto4.getNombre(), "BFG123");
+        Notificacion notificacion2 = new Notificacion(fechaNotif2, mensaje2);
+        propC.agregarNotificacion(notificacion2);
+		LocalDateTime fechaNotif3 = LocalDateTime.of(2025, 11, 18, 7, 45, 0); // Anteayer a las 7:45 AM
+        String mensaje3 = String.format("Pasaste por el puesto %s con el vehículo %s.", puesto2.getNombre(), "TLN342");
+        Notificacion notificacion3 = new Notificacion(fechaNotif3, mensaje3);
+        propD.agregarNotificacion(notificacion3);
+		LocalDateTime fechaNotif4 = LocalDateTime.of(2025, 11, 20, 10, 0, 0); // Hoy a las 10:00 AM (más reciente)
+        String mensaje4 = String.format("Pasaste por el puesto %s con el vehículo %s.", puesto3.getNombre(), "ABC123");
+        Notificacion notificacion4 = new Notificacion(fechaNotif4, mensaje4);
+        propA.agregarNotificacion(notificacion4);
+	}
 
 }

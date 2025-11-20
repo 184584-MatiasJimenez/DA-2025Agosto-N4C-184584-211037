@@ -83,7 +83,7 @@ public class Propietario extends Usuario {
 	}
 
 	public void agregarNotificacion(Notificacion n) {
-
+		this.notificaciones.add(n);
 	}
 
 	public void borrarNotificaciones() {
