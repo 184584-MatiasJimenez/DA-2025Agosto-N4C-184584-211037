@@ -5,11 +5,12 @@ public class Camioneta extends Vehiculo {
 
     public Camioneta(String matricula, String marca, String modelo, String color, int anio, Propietario propietario) {
         super(matricula, marca, modelo, color, anio, propietario);
+        this.setCategoria(null);
     }
 
     @Override
     protected void setCategoria(CategoriaVehiculo categoria) {
-        super.setCategoria(ServicioTransito.getInstancia().buscarCategoriaPorNombre("Moto"));
+        super.setCategoria(ServicioTransito.getInstancia().buscarCategoriaPorNombre("Camioneta"));
     }
 
 }

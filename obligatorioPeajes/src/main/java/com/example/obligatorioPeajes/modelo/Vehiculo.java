@@ -83,7 +83,7 @@ public abstract class Vehiculo {
 		}
 		double total =0;
 		for (Transito transito : transitos) {
-			total += transito.getTarifaBase();//no va tarifa base, va un metodo que calcula segun el tipo de 
+			total += transito.getMontoPagado(); 
 		}
 		return total;
 	}

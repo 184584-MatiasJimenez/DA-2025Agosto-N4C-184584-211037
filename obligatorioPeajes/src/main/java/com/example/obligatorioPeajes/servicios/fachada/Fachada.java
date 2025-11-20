@@ -7,6 +7,7 @@ import com.example.obligatorioPeajes.servicios.ServicioPrecarga;
 import com.example.obligatorioPeajes.servicios.ServicioTransito;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import com.example.obligatorioPeajes.dtos.BonificacionDTO;
+import com.example.obligatorioPeajes.dtos.TransitoDTO;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
 import java.util.*;
 
@@ -60,7 +61,6 @@ public class Fachada extends Observable {
 	}
 
 	public List<BonificacionDTO> obtenerBonificacionesPropietario(String cedula) {
-		// 1. Obtener la entidad del dominio
 		Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
 		
 		List<BonificacionDTO> listaDTos = new ArrayList<>();
@@ -79,11 +79,20 @@ public class Fachada extends Observable {
 		return this.servicioUsuario.obtenerVehiculosPropietario(cedula);
 	}
 
-	public java.util.List<Transito> obtenerHistorialTransitos(String cedula) {
-		return null;
+	public List<TransitoDTO> obtenerHistorialTransitos(String cedula) {
+		List<Transito> transitos = servicioTransito.obtenerTransitosPorPropietario(cedula);
+        
+        List<TransitoDTO> listaDTos = new ArrayList<>();
+        
+        if (transitos != null) {
+            for (Transito t : transitos) {
+                listaDTos.add(new TransitoDTO(t));
+            }
+        }
+        return listaDTos;
 	}
 
-	public java.util.List<Notificacion> obtenerNotificaciones(String cedula) {
+	public List<Notificacion> obtenerNotificaciones(String cedula) {
 		return null;
 	}
 

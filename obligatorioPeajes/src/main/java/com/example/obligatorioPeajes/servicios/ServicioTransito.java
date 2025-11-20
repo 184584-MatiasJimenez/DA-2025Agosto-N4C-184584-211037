@@ -2,7 +2,9 @@ package com.example.obligatorioPeajes.servicios;
 
 import com.example.obligatorioPeajes.modelo.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ServicioTransito {
 
@@ -98,6 +100,26 @@ public class ServicioTransito {
 
     public void agregarCategoria(CategoriaVehiculo categoria) {
         this.categoriasVehiculos.add(categoria);
+    }
+
+    public List<Transito>obtenerTransitosPorPropietario(String cedula) {
+        ServicioUsuario servicioUsuario = ServicioUsuario.getInstancia();
+        Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
+
+        if (propietario == null) {
+            return new ArrayList<>();
+        }
+
+        // **Punto 2: Lógica del ServicioTransito**
+        // Solo itera sobre los tránsitos y los filtra.
+        List<Transito> transitosDelPropietario = new ArrayList<>();
+        for (Transito t : this.transito) {
+            if (t.getPropietario().equals(propietario)) {
+                transitosDelPropietario.add(t);
+            }
+        }
+        
+        return transitosDelPropietario;
     }
 
 }
