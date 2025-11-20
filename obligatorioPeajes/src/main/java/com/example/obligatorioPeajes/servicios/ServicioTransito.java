@@ -34,25 +34,26 @@ public class ServicioTransito {
     }
 
     public Transito registrarTransito(Vehiculo vehiculo, String nombrePuesto, DateTime fecha) {
-        if(vehiculo == null) {
+        if (vehiculo == null) {
             return null;
         }
         PuestoDePeaje puesto = buscarPuestoDePeajePorNombre(nombrePuesto);
-        if (puesto == null) return null;
+        if (puesto == null)
+            return null;
 
-        Tarifa tarifaObj = buscarTarifa(puesto, vehiculo.getCategoria());
-        double tarifaBase = (tarifaObj != null) ? tarifaObj.getMonto() : 0.0;
+        Tarifa tarifa = buscarTarifa(puesto, vehiculo.getCategoria());
+        double tarifaBase = (tarifa != null) ? tarifa.getMonto() : 0.0;
         Transito nuevoTransito = new Transito(
-            fecha, 
-            vehiculo, 
-            puesto, 
-            tarifaBase
-            );
-        vehiculo.agregarTransito(nuevoTransito); 
+                fecha,
+                vehiculo,
+                puesto,
+                tarifaBase);
+        vehiculo.agregarTransito(nuevoTransito);
         this.transito.add(nuevoTransito);
-        
+
         return nuevoTransito;
     }
+
     public PuestoDePeaje buscarPuestoDePeajePorNombre(String nombre) {
         for (PuestoDePeaje puesto : this.puestosDePeaje) {
             if (puesto.getNombre().equalsIgnoreCase(nombre)) {
@@ -63,14 +64,16 @@ public class ServicioTransito {
     }
 
     public Tarifa buscarTarifa(PuestoDePeaje puesto, CategoriaVehiculo categoria) {
-        if(puesto == null || categoria == null) return null;
-        for(Tarifa t: this.tarifas) {
-            if(t.getPuesto().equals(puesto) && t.getCategoria().equals(categoria)) {
+        if (puesto == null || categoria == null)
+            return null;
+        for (Tarifa t : this.tarifas) {
+            if (t.getPuesto().equals(puesto) && t.getCategoria().equals(categoria)) {
                 return t;
             }
         }
         return null;
     }
+
     public static ServicioTransito getInstancia() {
         if (instancia == null) {
             instancia = new ServicioTransito();
@@ -82,6 +85,11 @@ public class ServicioTransito {
         PuestoDePeaje nuevoPuesto = new PuestoDePeaje(nombre, ubicacion);
         this.puestosDePeaje.add(nuevoPuesto);
         return nuevoPuesto;
+    }
+
+    public List<PuestoDePeaje> obtenerPuestosDePeaje() {
+        List<PuestoDePeaje> listaPuestos = new ArrayList<>(this.puestosDePeaje);
+        return listaPuestos;
     }
 
     public CategoriaVehiculo buscarCategoriaPorNombre(String nombre) {
@@ -98,11 +106,21 @@ public class ServicioTransito {
         this.tarifas.add(tarifa);
     }
 
+    public List<Tarifa> getTarifasPorPuestoDePeaje(PuestoDePeaje puesto) {
+        List<Tarifa> tarifasDelPuesto = new ArrayList<>();
+        for (Tarifa t : this.tarifas) {
+            if (t.getPuesto().equals(puesto)) {
+                tarifasDelPuesto.add(t);
+            }
+        }
+        return tarifasDelPuesto;
+    }
+
     public void agregarCategoria(CategoriaVehiculo categoria) {
         this.categoriasVehiculos.add(categoria);
     }
 
-    public List<Transito>obtenerTransitosPorPropietario(String cedula) {
+    public List<Transito> obtenerTransitosPorPropietario(String cedula) {
         ServicioUsuario servicioUsuario = ServicioUsuario.getInstancia();
         Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
 
@@ -118,7 +136,7 @@ public class ServicioTransito {
                 transitosDelPropietario.add(t);
             }
         }
-        
+
         return transitosDelPropietario;
     }
 

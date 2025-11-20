@@ -21,29 +21,26 @@
         <p class="subtitle">Seleccione un puesto, verifique sus tarifas, ingrese una matricula y emule un tránsito.</p>
 
         <div class="main-content">
-            <div class="form-section">
+            <form id="transitoForm" class="form-section" onsubmit="emularTransito(event);">
                 <div class="form-group">
                     <label for="puesto">Puesto</label>
-                    <select id="puesto" name="puesto">
-                        <option value="101">Puesto 101 - Acceso Norte</option>
-                        <option value="102">Puesto 102 - Acceso Sur</option>
-                        <option value="103">Puesto 103 - Acceso Este</option>
-                        <option value="104">Puesto 104 - Acceso Oeste</option>
+                    <select id="puesto" name="puesto" required>
+                        <option value="-1">Cargando puestos...</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="matricula">Matrícula</label>
-                    <input type="text" id="matricula" name="matricula" placeholder="Ej: ABC1234" />
+                    <input type="text" id="matricula" name="matricula" placeholder="Ej: ABC1234" required/>
                 </div>
 
                 <div class="form-group">
                     <label for="fechaHora">Fecha y hora del transito</label>
-                    <input type="text" id="fechaHora" name="fechaHora" placeholder="Ej: 2025-11-19 15:30" />
+                    <input type="datetime-local" id="fechaHora" name="fechaHora" placeholder="Ej: 2025-11-19 15:30" required/>
                 </div>
 
-                <button type="button" class="btn-emular" onclick="emularTransito()">Emular tránsito</button>
-            </div>
+                <button type="submit" class="btn-emular">Emular tránsito</button>
+            </form>
 
             <div class="tarifas-section">
                 <h3>Tarifas del puesto</h3>
@@ -55,18 +52,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>A (Auto)</td>
-                            <td>$120.00</td>
-                        </tr>
-                        <tr>
-                            <td>B (Camioneta)</td>
-                            <td>$180.00</td>
-                        </tr>
-                        <tr>
-                            <td>C (Camión)</td>
-                            <td>$280.00</td>
-                        </tr>
+                        <!-- Filas de tarifas generadas dinámicamente -->
+                    </tbody>
                     </tbody>
                 </table>
                 <p class="tarifas-description">Se muestran categoría y monto actuales del puesto seleccionado.</p>
@@ -88,35 +75,137 @@
     <script>
         urlIniciarVista = "/emularTransito/vistaConectada";
         urlCierreVista = "/emularTransito/vistaCerrada";
-        
-        function emularTransito() {
-            const puesto = document.getElementById('puesto').value;
-            const matricula = document.getElementById('matricula').value;
-            const fechaHora = document.getElementById('fechaHora').value;
 
-            if (!matricula || !fechaHora) {
-                alert('Por favor complete todos los campos');
+        // function emularTransito() {
+        //     const puesto = document.getElementById('puesto').value;
+        //     const matricula = document.getElementById('matricula').value;
+        //     const fechaHora = document.getElementById('fechaHora').value;
+
+        //     if (!matricula || !fechaHora) {
+        //         alert('Por favor complete todos los campos');
+        //         return;
+        //     }
+
+        //     // Simulación de resultado (puedes reemplazar esto con una llamada a tu API)
+        //     const resultadoContent = document.getElementById('resultadoContent');
+        //     resultadoContent.innerHTML = `
+        //         <p><strong>Propietario:</strong> Juan Pérez (Activo)</p>
+        //         <p><strong>Categoría:</strong> A (Auto)</p>
+        //         <p><strong>Bonificación:</strong> Residente Costa de Oro (10%)</p>
+        //         <p><strong>Costo del tránsito:</strong> $ 120.00</p>
+        //         <p><strong>Saldo luego del tránsito:</strong> $ 1400.75</p>
+        //     `;
+
+        //     document.getElementById('resultadoSection').style.display = 'block';
+        // }
+
+        function emularTransito(event) {
+            event.preventDefault();
+            submit(`emularTransito/transito`, serializarFormulario("transitoForm"));
+        }
+
+        function listaPuestosDePeaje(puestosDePeaje) {
+            const puestoSelect = document.getElementById('puesto');
+            puestoSelect.innerHTML = ''; // Limpiar opciones existentes
+
+            puestosDePeaje.forEach(puesto => {
+                const option = document.createElement('option');
+                option.value = puesto.nombre;
+                option.textContent = `${puesto.nombre} - ${puesto.direccion}`;
+                puestoSelect.appendChild(option);
+            });
+
+            // seleccionar el primero por defecto y mostrar sus tarifas
+            if (puestosDePeaje.length > 0) {
+                puestoSelect.selectedIndex = 0;
+                actualizarTarifasTabla(puestosDePeaje[0]);
+            }
+        }
+
+        function actualizarTarifasTabla(puestoDto) {
+            const tbody = document.querySelector('.tarifas-table tbody');
+            tbody.innerHTML = '';
+
+            if (!puestoDto || !Array.isArray(puestoDto.tarifas) || puestoDto.tarifas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="2">No hay tarifas para este puesto.</td></tr>';
                 return;
             }
 
-            // Simulación de resultado (puedes reemplazar esto con una llamada a tu API)
+            puestoDto.tarifas.forEach(t => {
+                const categoriaNombre = (t.categoria && t.categoria.nombre) ? t.categoria.nombre : (t.categoriaNombre || 'Sin categoría');
+                const monto = (typeof t.monto !== 'undefined') ? t.monto : '';
+                const tr = document.createElement('tr');
+                const tdCat = document.createElement('td');
+                tdCat.textContent = categoriaNombre;
+                const tdMonto = document.createElement('td');
+                tdMonto.textContent = monto !== '' ? `$ ${Number(monto).toFixed(2)}` : '';
+                tr.appendChild(tdCat);
+                tr.appendChild(tdMonto);
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function mostrar_error(mensaje) {
+            await mostrarMensaje(mensaje);
+        }
+
+        // Actualizar tarifas cuando cambia el puesto
+        document.getElementById('puesto').addEventListener('change', function () {
+            const puestoSeleccionado = this.value;
+            if (!window.__puestosCache || window.__puestosCache.length === 0) return;
+            const puestoDto = window.__puestosCache.find(p => p.nombre === puestoSeleccionado);
+            actualizarTarifasTabla(puestoDto);
+        });
+
+        // Cargar los puestos desde el backend y mantener cache
+        (function cargarPuestos() {
+            fetch('/emularTransito/puestosDePeaje')
+                .then(res => res.json())
+                .then(data => {
+                    const entry = Array.isArray(data) ? data.find(e => e.id === 'listaPuestosDePeaje') : null;
+                    const puestos = entry && entry.parametro ? entry.parametro : [];
+                    window.__puestosCache = puestos;
+                    listaPuestosDePeaje(puestos);
+                })
+                .catch(err => {
+                    console.error('Error al cargar puestos de peaje:', err);
+                    const puestoSelect = document.getElementById('puesto');
+                    puestoSelect.innerHTML = '<option value="-1">Error cargando puestos</option>';
+                });
+        })();
+
+        // Procesa el TransitoDTO devuelto por el controlador y muestra los datos
+        function mostrar_transito(transito) {
             const resultadoContent = document.getElementById('resultadoContent');
+            if (!transito) {
+                resultadoContent.innerHTML = '<p>Error: respuesta inválida del servidor.</p>';
+                document.getElementById('resultadoSection').style.display = 'block';
+                return;
+            }
+
+            // Si el DTO contiene un mensaje de error, mostrarlo como alerta
+            // if (transito.mensajeError) {
+            //     resultadoContent.innerHTML = `<p class="error">${transito.mensajeError}</p>`;
+            //     document.getElementById('resultadoSection').style.display = 'block';
+            //     return;
+            // }
+
+            const propietario = transito.nombrePropietario || 'N/D';
+            const categoria = transito.categoriaVehiculo || 'N/D';
+            const bonificacion = transito.nombreBonificacion || 'N/A';
+            const tarifa = (typeof transito.tarifaBase !== 'undefined') ? Number(transito.tarifaBase).toFixed(2) : '';
+            const saldoPosterior = transito.saldoPosterior ? Number(transito.saldoPosterior).toFixed(2) : null;
+
             resultadoContent.innerHTML = `
-                <p><strong>Propietario:</strong> Juan Pérez (Activo)</p>
-                <p><strong>Categoría:</strong> A (Auto)</p>
-                <p><strong>Bonificación:</strong> Residente Costa de Oro (10%)</p>
-                <p><strong>Costo del tránsito:</strong> $ 120.00</p>
-                <p><strong>Saldo luego del tránsito:</strong> $ 1400.75</p>
+                <p><strong>Propietario:</strong> ${propietario}</p>
+                <p><strong>Categoría:</strong> ${categoria}</p>
+                <p><strong>Bonificación:</strong> ${bonificacion}</p>
+                <p><strong>Costo del tránsito:</strong> $ ${tarifa}</p>
+                <p><strong>Saldo luego del tránsito:</strong> $ ${saldoPosterior}</p>
             `;
 
             document.getElementById('resultadoSection').style.display = 'block';
         }
-
-        // Actualizar tarifas cuando cambia el puesto
-        document.getElementById('puesto').addEventListener('change', function() {
-            // Aquí puedes agregar lógica para actualizar las tarifas según el puesto seleccionado
-            // Por ahora mantenemos las mismas tarifas
-        });
     </script>
 </body>
 

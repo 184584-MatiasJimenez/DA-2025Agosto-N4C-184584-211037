@@ -79,7 +79,7 @@ public class Propietario extends Usuario {
 	}
 
 	public void restarSaldo(double monto) {
-
+		this.saldoActual = this.saldoActual - monto;
 	}
 
 	public void agregarNotificacion(Notificacion n) {

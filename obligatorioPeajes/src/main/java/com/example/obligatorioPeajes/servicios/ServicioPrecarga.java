@@ -32,24 +32,6 @@ public class ServicioPrecarga {
         PuestoDePeaje puesto3 = sistemaTransito.agregarPuestoDePeaje("Puesto Sur", "Ruta 10 km 100");
         PuestoDePeaje puesto4 = sistemaTransito.agregarPuestoDePeaje("Puesto Este", "Ruta 15 km 150");
 
-        
-        //agregar tarifas - Puesto Central (puesto1)
-        sistemaTransito.agregarTarifa(puesto1, categoriaAuto, 100.0);
-        sistemaTransito.agregarTarifa(puesto1, catCamioneta, 150.0);
-        sistemaTransito.agregarTarifa(puesto1, categoriaMoto, 50.0);
-        //agregar tarifas - Puesto Norte (puesto2)
-        sistemaTransito.agregarTarifa(puesto2, categoriaAuto, 120.0);
-        sistemaTransito.agregarTarifa(puesto2, catCamioneta, 170.0);
-        sistemaTransito.agregarTarifa(puesto2, categoriaMoto, 60.0);
-        //agregar tarifas - Puesto Sur (puesto3)
-        sistemaTransito.agregarTarifa(puesto3, categoriaAuto, 110.0);
-        sistemaTransito.agregarTarifa(puesto3, catCamioneta, 160.0);
-        sistemaTransito.agregarTarifa(puesto3, categoriaMoto, 55.0);
-        //agregar tarifas - Puesto Este (puesto4)
-        sistemaTransito.agregarTarifa(puesto4, categoriaAuto, 130.0);
-        sistemaTransito.agregarTarifa(puesto4, catCamioneta, 180.0);
-        sistemaTransito.agregarTarifa(puesto4, categoriaMoto, 65.0);
-
 		// agregar tarifas - Puesto Central (puesto1)
 		sistemaTransito.agregarTarifa(puesto1, categoriaAuto, 100.0);
 		sistemaTransito.agregarTarifa(puesto1, catCamioneta, 150.0);

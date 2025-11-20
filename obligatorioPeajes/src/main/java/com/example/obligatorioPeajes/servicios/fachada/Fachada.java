@@ -8,6 +8,7 @@ import com.example.obligatorioPeajes.servicios.ServicioTransito;
 import com.example.obligatorioPeajes.servicios.ServicioUsuario;
 import com.example.obligatorioPeajes.dtos.BonificacionDTO;
 import com.example.obligatorioPeajes.dtos.NotificacionDTO;
+import com.example.obligatorioPeajes.dtos.PuestoDePeajeDTO;
 import com.example.obligatorioPeajes.dtos.TransitoDTO;
 import java.util.Collections;
 import com.example.obligatorioPeajes.excepciones.UsuarioException;
@@ -64,12 +65,12 @@ public class Fachada extends Observable {
 
 	public List<BonificacionDTO> obtenerBonificacionesPropietario(String cedula) {
 		Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
-		
+
 		List<BonificacionDTO> listaDTos = new ArrayList<>();
-		
+
 		if (propietario != null) {
 			List<BonificacionAsignada> asignadas = propietario.obtenerBonificacionesAsignadas();
-			
+
 			for (BonificacionAsignada b : asignadas) {
 				listaDTos.add(new BonificacionDTO(b));
 			}
@@ -83,20 +84,20 @@ public class Fachada extends Observable {
 
 	public List<TransitoDTO> obtenerHistorialTransitos(String cedula) {
 		List<Transito> transitos = servicioTransito.obtenerTransitosPorPropietario(cedula);
-        
-        List<TransitoDTO> listaDTos = new ArrayList<>();
-        
-        if (transitos != null) {
-            for (Transito t : transitos) {
-                listaDTos.add(new TransitoDTO(t));
-            }
-        }
-        return listaDTos;
+
+		List<TransitoDTO> listaDTos = new ArrayList<>();
+
+		if (transitos != null) {
+			for (Transito t : transitos) {
+				listaDTos.add(new TransitoDTO(t));
+			}
+		}
+		return listaDTos;
 	}
 
 	public List<NotificacionDTO> obtenerNotificaciones(String cedula) {
 		Propietario propietario = servicioUsuario.buscarPropietarioPorCI(cedula);
-		if(propietario != null) {
+		if (propietario != null) {
 			List<Notificacion> notificaciones = propietario.getNotificaciones();
 			return NotificacionDTO.fromList(notificaciones);
 		}
@@ -111,15 +112,25 @@ public class Fachada extends Observable {
 		return this.servicioUsuario.buscarPropietarioPorCI(ci);
 	}
 
-	public java.util.List<PuestoDePeaje> obtenerListaPuestos() {
+	public List<PuestoDePeajeDTO> obtenerPuestosDePeajes() {
+		List<PuestoDePeajeDTO> listaDTos = new ArrayList<>();
+		List<PuestoDePeaje> puestos = this.servicioTransito.obtenerPuestosDePeaje();
+
+		for (PuestoDePeaje puesto : puestos) {
+			PuestoDePeajeDTO dto = new PuestoDePeajeDTO(puesto);
+			List<Tarifa> tarifas = this.servicioTransito.getTarifasPorPuestoDePeaje(puesto);
+			dto.setTarifas(tarifas);
+			listaDTos.add(dto);
+		}
+
+		return listaDTos;
+	}
+
+	public List<Bonificacion> obtenerListaBonificaciones() {
 		return null;
 	}
 
-	public java.util.List<Bonificacion> obtenerListaBonificaciones() {
-		return null;
-	}
-
-	public java.util.List<EstadoPropietario> obtenerListaEstadosPropietario() {
+	public List<EstadoPropietario> obtenerListaEstadosPropietario() {
 		return null;
 	}
 
@@ -130,8 +141,34 @@ public class Fachada extends Observable {
 	public void asignarBonificacion(String ciPropietario, String nombreBonif, String nombrePuesto) {
 	}
 
-	public Transito emularTransito(String matricula, String nombrePuesto, DateTime fechaHora) {
-		return null;
+	public TransitoDTO emularTransito(String matricula, String nombrePuesto, DateTime fechaHora) {
+		Vehiculo vehiculo = servicioUsuario.buscarVehiculoPorMatricula(matricula);
+		if (vehiculo == null)
+			return new TransitoDTO("No existe el vehículo");
+
+		Propietario propietario = vehiculo.getPropietario();
+		if (propietario.estaDeshabilitado()) {
+			return new TransitoDTO("El propietario del vehículo está deshabilitado, no puede realizar tránsitos");
+		}
+		if (propietario.getEstado() instanceof Suspendido) {
+			return new TransitoDTO("El propietario del vehículo está suspendido, no puede realizar tránsitos");
+		}
+
+		PuestoDePeaje puesto = servicioTransito.buscarPuestoDePeajePorNombre(nombrePuesto);
+		Tarifa tarifa = servicioTransito.buscarTarifa(puesto, vehiculo.getCategoria());
+		double tarifaBase = tarifa.getMonto();
+
+		double saldoActual = propietario.getSaldoActual();
+		if (saldoActual < tarifaBase) {
+			return new TransitoDTO("Saldo insuficiente: " + saldoActual);
+		}
+
+		Transito creado = servicioTransito.registrarTransito(vehiculo, nombrePuesto, fechaHora);
+		// descontar saldo del propietario luego de registrar el tránsito
+		if (creado != null && propietario != null) {
+			propietario.restarSaldo(creado.getMontoPagado());
+		}
+		return new TransitoDTO(creado);
 	}
 
 }
