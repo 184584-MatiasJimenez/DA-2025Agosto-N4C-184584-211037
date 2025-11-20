@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tablero Control</title>
     <!-- Enlace al CSS externo -->
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/modal.css">
     <!-- Scripts -->
     <script src="vistaWeb.js"></script>
     <script src="sse.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body>
     <script src="utilesVista.js"></script>
 
@@ -43,27 +46,28 @@
                 </div>
             </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <h2 class="text-xl font-bold mb-4 text-gray-700">Bonificaciones asignadas</h2>
-                        <div class="table-container overflow-x-auto">
-                            <table class="data-table w-full text-left border-collapse">
-                                <thead>
-                                    <tr class="bg-gray-100 border-b">
-                                        <th class="p-2">Bonificación</th>
-                                        <th class="p-2">Puesto</th>
-                                        <th class="p-2">Fecha asignada</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bonificaciones-body">
-                                    <tr>
-                                        <td colspan="3" class="text-center p-4 text-gray-500">Cargando bonificaciones...</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 text-gray-700">Bonificaciones asignadas</h2>
+                    <div class="table-container overflow-x-auto">
+                        <table class="data-table w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-100 border-b">
+                                    <th class="p-2">Bonificación</th>
+                                    <th class="p-2">Puesto</th>
+                                    <th class="p-2">Fecha asignada</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bonificaciones-body">
+                                <tr>
+                                    <td colspan="3" class="text-center p-4 text-gray-500">Cargando bonificaciones...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+                </div>
 
                     <div class="bg-white p-4 rounded-lg shadow-md">
                         <h2 class="text-xl font-bold mb-4 text-gray-700">Vehículos registrados</h2>
@@ -130,12 +134,19 @@
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="mensajeDlg">
-        <div class="modal-content">
-            <h3 class="text-xl font-semibold text-primary">Mensaje del Sistema</h3>
-            <p id="textoMensaje" class="my-4"></p>
-            <button id="botonAceptar">Aceptar</button>
+            <!-- Modal -->
+            <div id="mensajeDlg">
+                <div class="modal-content">
+                    <h3 class="text-xl font-semibold text-primary">Mensaje del Sistema</h3>
+                    <p id="textoMensaje" class="my-4"></p>
+                    <button id="botonAceptar">Aceptar</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Administración</p>
         </div>
     </div>
 
@@ -189,7 +200,7 @@
                 document.body.innerHTML = '';
             }
         }
-        
+
         //cargar vehiculos
         function cargarVehiculos() {
             submit("/menuTablero/vehiculosPropietario", null, 'GET');
@@ -197,39 +208,36 @@
 
         const configuracionColumnasVehiculos = [
             { campo: 'matricula' },
-            { campo: 'modelo'},
+            { campo: 'modelo' },
             { campo: 'color' },
             { campo: 'cantidadTransitos' },
             { campo: 'montoTotalGastado', formateador: monto => '$ ' + monto.toFixed(2) }
         ];
-        
-        function mostrar_listaVehiculos(vehiculos){
+
+        function mostrar_listaVehiculos(vehiculos) {
             const tbody = document.getElementById('vehiculos-body');
             tbody.innerHTML = crearFilasTablaDesdeJson({
-                data : vehiculos,
+                data: vehiculos,
                 columnas: configuracionColumnasVehiculos
             });
-        }
-        function primerSubmitFinalizado() {
-            cargarVehiculos();
         }
 
         //Cargar bonificaciones
         const configuracionColumnasBonificaciones = [
-            { campo: 'nombreBonificacion' }, 
-            { campo: 'nombrePuesto' },       
-            { campo: 'fechaAsignada' }       
+            { campo: 'nombreBonificacion' },
+            { campo: 'nombrePuesto' },
+            { campo: 'fechaAsignada' }
         ];
         // 2. Función que RECIBE los datos del servidor (El nombre debe ser mostrar_ + la clave de la Respuesta)
         function mostrar_listaBonificaciones(bonificaciones) {
             const tbody = document.getElementById('bonificaciones-body');
-            
+
             if (!bonificaciones || bonificaciones.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="3" class="text-center p-4">No tienes bonificaciones asignadas.</td></tr>';
                 return;
             }
             tbody.innerHTML = crearFilasTablaDesdeJson({
-                data : bonificaciones,
+                data: bonificaciones,
                 columnas: configuracionColumnasBonificaciones
             });
         }
@@ -250,27 +258,27 @@
             { campo: 'nombrePuesto' },
             { campo: 'matricula' },
             { campo: 'categoriaVehiculo', encabezado: 'Categoría' },
-            { campo: 'fechaHora' }, 
+            { campo: 'fechaHora' },
             { campo: 'tarifaBase', formateador: monto => '$ ' + monto.toFixed(2) },
             { campo: 'descuentoAplicado', formateador: monto => '$ ' + monto.toFixed(2) },
             { campo: 'montoPagado', formateador: monto => '$ ' + monto.toFixed(2) }, // Monto final
-            { campo: 'nombreBonificacion' } 
-            ];
-        
+            { campo: 'nombreBonificacion' }
+        ];
+
         function cargarHistorialTransitos() {
             submit("/menuTablero/historialTransitos", null, 'GET');
         }
 
         function mostrar_listaTransitos(transitos) {
             const tbody = document.getElementById('transitos-body');
-            
+
             if (!transitos || transitos.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4">No se encontraron tránsitos.</td></tr>';
                 return;
             }
-            
+
             tbody.innerHTML = crearFilasTablaDesdeJson({
-                data : transitos,
+                data: transitos,
                 columnas: configuracionColumnasTransitos
             });
         }
@@ -298,8 +306,9 @@
         }
 
 
+
     </script>
 
 </body>
-</html>
 
+</html>
