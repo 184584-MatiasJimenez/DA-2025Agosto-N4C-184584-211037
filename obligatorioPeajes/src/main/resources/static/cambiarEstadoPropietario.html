@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar estado de propietario</title>
+    <link rel="stylesheet" href="css/cambiarEstado.css">
+    <script src='vistaWeb.js'></script>
+    <script src='sse.js'></script>
+</head>
+
+<body>
+    <script src="utilesVista.js"></script>
+
+    <div class="container">
+        <div class="header">
+            <div class="header-icon"></div>
+            <h1>Cambiar estado de propietario</h1>
+        </div>
+        <p class="subtitle">Ingrese la cédula, revise el estado actual y seleccione un nuevo estado (datos de ejemplo).</p>
+
+        <div class="main-content">
+            <!-- Sección izquierda -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="cedula">Cédula de identidad</label>
+                    <input type="text" id="cedula" name="cedula" value="12345678" />
+                    <button type="button" class="btn" onclick="buscarPropietario()">Buscar</button>
+                </div>
+            </div>
+
+            <!-- Sección derecha -->
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="estado">Estados definidos</label>
+                    <select id="estado" name="estado">
+                        <option value="activo" selected>Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                        <option value="suspendido">Suspendido</option>
+                        <option value="bloqueado">Bloqueado</option>
+                    </select>
+                    <button type="button" class="btn" onclick="cambiarEstado()">Cambiar estado</button>
+                    <p class="info-text">El estado actual se mostrará preseleccionado.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de detalles del propietario -->
+        <div class="owner-section" id="ownerSection">
+            <h3>Propietario</h3>
+            <div class="owner-info" id="ownerInfo">
+                <p><span class="label">Nombre:</span> <span class="value" id="ownerNameDisplay">---</span></p>
+                <p><span class="label">Estado actual:</span> <span class="value" id="estadoActualDisplay">---</span></p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 - Administración</p>
+        </div>
+    </div>
+
+    <script>
+        const estadoSelect = document.getElementById('estado');
+        const ownerInfo = document.getElementById('ownerInfo'); 
+        const ownerNameDisplay = document.getElementById('ownerNameDisplay'); 
+        const estadoActualDisplay = document.getElementById('estadoActualDisplay');
+        
+        urlIniciarVista = "/cambiarEstadoPropietario/vistaConectada";
+        urlCierreVista = "/cambiarEstadoPropietario/vistaCerrada";
+
+        // Función para limpiar la vista
+        function resetearVista() {
+            if (estadoSelect) estadoSelect.innerHTML = '<option value="">Buscar propietario primero</option>';
+            if (ownerNameDisplay) ownerNameDisplay.textContent = '---';
+            if (estadoActualDisplay) estadoActualDisplay.textContent = '---';
+        }
+        function mostrarInfoPropietario(nombre, estado) {
+            ownerNameDisplay.textContent = nombre;
+            estadoActualDisplay.textContent = estado;
+        }
+        function buscarPropietario() {
+            const cedula = document.getElementById('cedula').value;
+            
+            if (!cedula) {
+                alert('Por favor ingrese una cédula de identidad');
+                return;
+            }
+            const urlData = 'cedula=' + encodeURIComponent(cedula);
+            submit(
+                '/cambiarEstadoPropietario/buscarPropietario',
+                urlData,
+                'GET'
+            );
+        }
+        function cambiarEstado() {
+            const cedula = document.getElementById('cedula').value.trim();
+            const nuevoEstado = estadoSelect.value;
+            
+            if (!cedula || ownerNameDisplay.textContent === '---') {
+                alert('Por favor busque un propietario primero.');
+                return;
+            }
+            if (!nuevoEstado) {
+                alert('Por favor seleccione un nuevo estado.');
+                return;
+            }
+            const estadoSeleccionadoText = estadoSelect.options[estadoSelect.selectedIndex].textContent;    
+            if (estadoSeleccionadoText === estadoActualDisplay.textContent) {
+                alert('El propietario ya se encuentra en el estado seleccionado.');
+                return;
+            }
+            const urlData = 'cedula=' + encodeURIComponent(cedula) + '&nuevoEstado=' + encodeURIComponent(nuevoEstado);
+            submit(
+                '/cambiarEstadoPropietario/cambiarEstado',
+                urlData,
+                'POST'
+            );
+        }
+        function inicializarSelect() {
+            estadoSelect.innerHTML = '<option value="">Seleccione un estado</option>';
+            ownerInfo.innerHTML = '';
+        }
+        function mostrar_nombreCompleto(nombre) {
+            if (ownerNameDisplay) ownerNameDisplay.textContent = nombre;
+        }
+        function mostrar_listaEstados(listaEstadosJson) {
+            const estados = JSON.parse(listaEstadosJson); 
+            estadoSelect.innerHTML = ''; 
+            estados.forEach(estado => {
+                const option = document.createElement('option');
+                option.value = estado.value;
+                option.textContent = estado.nombre;
+                estadoSelect.appendChild(option);
+            });
+        }
+        function mostrar_estadoActual(estado) {
+            if (estadoActualDisplay) estadoActualDisplay.textContent = estado;
+            if (estadoSelect) estadoSelect.value = estado.toLowerCase();
+        }
+        function mostrar_nuevoEstado(nombreNuevoEstado) {
+            estadoActualDisplay.textContent = nombreNuevoEstado;
+            for (let i = 0; i < estadoSelect.options.length; i++) {
+                if (estadoSelect.options[i].textContent === nombreNuevoEstado) {
+                    estadoSelect.options[i].selected = true;
+                    break;
+                }
+            }
+        }
+        function mostrar_exito(mensaje) {
+            alert(mensaje);
+        }
+        function mostrar_error(mensaje) {
+            alert('Error en la búsqueda: ' + mensaje); 
+            resetearVista(); 
+        }
+    </script>
+</body>
+
+</html>

@@ -2,15 +2,17 @@ package com.example.obligatorioPeajes.modelo;
 
 public class Penalizado implements EstadoPropietario {
 
-
+	public static Penalizado instancia;
 	/**
 	 * @see EstadoPropietario#puedeAsignarBonificacion()
 	 */
 	public boolean puedeAsignarBonificacion() {
 		return false;
 	}
-
-
+	@Override
+	public boolean esDeshabilitado() {
+		return false;
+	}
 	/**
 	 * @see EstadoPropietario#puedeAplicarBonificacion()
 	 */
@@ -18,14 +20,12 @@ public class Penalizado implements EstadoPropietario {
 		return false;
 	}
 
-
 	/**
 	 * @see EstadoPropietario#puedeRecibirNotificaciones()
 	 */
 	public boolean puedeRecibirNotificaciones() {
 		return false;
 	}
-
 
 	/**
 	 * @see EstadoPropietario#puedeRealizarTransito()
@@ -36,8 +36,10 @@ public class Penalizado implements EstadoPropietario {
 
 
     public static EstadoPropietario getInstancia() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstancia'");
+       if (instancia == null) {
+            instancia = new Penalizado();
+    	}
+        return instancia;
     }
 
 }

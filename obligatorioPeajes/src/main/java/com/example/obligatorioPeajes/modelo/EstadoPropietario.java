@@ -1,6 +1,7 @@
 package com.example.obligatorioPeajes.modelo;
 
 public interface EstadoPropietario {
+	public abstract boolean esDeshabilitado();
 
 	public abstract boolean puedeAsignarBonificacion();
 

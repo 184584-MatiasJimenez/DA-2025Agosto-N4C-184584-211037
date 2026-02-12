@@ -1,5 +1,8 @@
 package com.example.obligatorioPeajes.modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Vehiculo {
 
 	private String matricula;
@@ -14,6 +17,8 @@ public abstract class Vehiculo {
 
 	private int anio;
 
+	private List<Transito> transitos;
+
 	private Propietario propietario;
 
 	public Vehiculo(String matricula, String marca, String modelo, String color, int anio, Propietario propietario) {
@@ -23,33 +28,64 @@ public abstract class Vehiculo {
 		this.color = color;
 		this.anio = anio;
 		this.propietario = propietario;
+		this.transitos = new ArrayList<>();
 	}
 
 	public String getMatricula() {
 		return matricula;
 	}
-    public CategoriaVehiculo getCategoria() {
-        return categoria;
-    }
 
-    public Propietario getPropietario() {
-        return propietario;
-    }
-    public String getMarca() {
-        return marca;
-    }
-    public String getModelo() {
-        return modelo;
-    }
-    public int getAnio() {
-        return anio;
-    }
-    public String getColor() {
-        return color;
-    }
+	public CategoriaVehiculo getCategoria() {
+		return categoria;
+	}
 
-	public java.util.List<Transito> getTransitos() {
-		return null;
+	public Propietario getPropietario() {
+		return propietario;
+	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public String getModelo() {
+		return modelo;
+	}
+
+	public int getAnio() {
+		return anio;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public List<Transito> getTransitos() {
+		return transitos;
+	}
+
+	protected void setCategoria(CategoriaVehiculo categoria) {
+		this.categoria = categoria;
+	}
+	public void agregarTransito(Transito transito) {
+		if(this.transitos == null) {
+			this.transitos = new ArrayList<>();
+		}
+		this.transitos.add(transito);
+	}
+
+	public int getCantidadTransitos() {
+		return (transitos!= null) ? transitos.size() : 0;
+	}
+
+	public double getMontoTotalGastado() {
+		if(transitos == null || transitos.isEmpty()) {
+			return 0;
+		}
+		double total =0;
+		for (Transito transito : transitos) {
+			total += transito.getMontoPagado(); 
+		}
+		return total;
 	}
 
 }

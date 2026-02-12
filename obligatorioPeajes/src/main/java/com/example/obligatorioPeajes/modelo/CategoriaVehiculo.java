@@ -2,7 +2,7 @@ package com.example.obligatorioPeajes.modelo;
 
 public class CategoriaVehiculo {
 
-	public CategoriaVehiculo(String nombreCat) {
+    public CategoriaVehiculo(String nombreCat) {
         nombre = nombreCat;
     }
 
